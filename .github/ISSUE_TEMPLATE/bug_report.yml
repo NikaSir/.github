@@ -1,0 +1,76 @@
+name: Bug report
+description: Report a reproducible defect or regression
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a problem. Remove credentials, tokens, private keys, recovery codes, device secrets, and personal data before submitting.
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Project, integration, firmware, or release version where the problem occurs.
+      placeholder: "v1.2.3"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Relevant platform, operating system, Home Assistant version, hardware, device model, or network context.
+      placeholder: "Home Assistant 2026.x / device model / OS"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe the observed defect clearly.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Provide the smallest reliable sequence that reproduces the issue.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Sanitized logs or diagnostics
+      description: Paste only relevant data with secrets and personal information removed.
+      render: shell
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Include timing, frequency, recent changes, screenshots, or other useful context.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission checks
+      options:
+        - label: I searched existing open and closed issues.
+          required: true
+        - label: I removed credentials, secrets, private data, and recovery information.
+          required: true
+        - label: This is not a security vulnerability requiring private disclosure.
+          required: true
