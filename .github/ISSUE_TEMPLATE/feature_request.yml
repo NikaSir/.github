@@ -1,0 +1,48 @@
+name: Feature request
+description: Propose a new capability or improvement
+title: "[Feature]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the problem first, then the proposed solution. Keep the request within the repository's scope.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or need
+      description: What limitation, workflow, or use case should be improved?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the desired behavior or interface.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe workarounds or other designs you considered.
+  - type: textarea
+    id: impact
+    attributes:
+      label: Compatibility and impact
+      description: Note any effect on existing configuration, APIs, entities, devices, releases, or migration.
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Add examples, diagrams, references, or screenshots if useful. Remove secrets and personal data.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission checks
+      options:
+        - label: I searched existing issues and discussions for a similar request.
+          required: true
+        - label: The request is within this repository's documented scope.
+          required: true
+        - label: I removed credentials, secrets, private data, and recovery information.
+          required: true
