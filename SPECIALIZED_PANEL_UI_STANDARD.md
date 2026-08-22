@@ -1,252 +1,345 @@
-# Home Assistant NikaS — Specialized Panel UI Standard
+# Home Assistant NikaS — Integration Dashboard UI Standard v1.2
 
-Status: **mandatory project-wide UI contract**
-
+Status: **mandatory project-wide UI contract**  
+Revision: **2026-08-22**  
 Primary acceptance viewport: **iPhone Pro Max · portrait · one-handed operation**
 
-Specialized integration panels are designed as mobile applications inside Home Assistant, not as ordinary Lovelace dashboards.
+Specialized integration-owned panels are mobile applications inside Home Assistant, not ordinary Lovelace dashboards. Domain content stays device-specific, but application shell and navigation behavior are shared.
 
-## 1. Common application shell
+## 1. Application model
 
-Every specialized panel has three persistent layers:
-
-1. **Header** — exits the specialized application and hosts at most 1–2 truly global panel actions.
-2. **Content** — device-specific status, controls, telemetry, graphs, diagnostics and workflows.
-3. **Bottom Tab Bar** — switches only between the main sections of the current specialized application.
-
-Canonical shape:
+### Single-device application
 
 ```text
-┌─────────────────────────────────┐
-│ ←  Panel title              ⟳ ⋮ │
-├─────────────────────────────────┤
-│                                 │
-│        CURRENT SCREEN           │
-│                                 │
-│        STATUS                   │
-│        CONTROLS                 │
-│        TELEMETRY                │
-│                                 │
-│        vertical scroll          │
-│                                 │
-├─────────────────────────────────┤
-│  Overview │ Section │ ... │ Diag│
-└─────────────────────────────────┘
-             iOS Safe Area
+Header → Content → Bottom Tab Bar
 ```
+
+### Multi-device application
+
+```text
+Header → Device Selector → Content of selected device → Bottom Tab Bar
+```
+
+The levels have fixed meanings:
+
+- **Header Back** — where to exit the specialized application.
+- **Device Selector** — which peer physical device is selected.
+- **Bottom Tab Bar** — which main section/aspect of the selected device is open.
+
+These navigation levels must never be conflated.
 
 ## 2. Header
 
-Each primary screen uses the same compact Header.
+Every main screen uses the same compact Header.
 
-Required:
+Canonical form:
 
-- left: `mdi:arrow-left` and preferably text `Назад` when space allows;
-- center/main area: panel/system title;
-- optional secondary device identity text;
-- right: at most 1–2 truly global actions such as Refresh or `⋮`.
+```text
+[← Назад]        Panel title        [Refresh / ⋮]
+                  short subtitle
+```
 
-### Back contract
+### 2.1 Back
 
-Back uses an **explicit Home Assistant navigation target** declared by the panel as `parent_path`.
+- left side;
+- icon `mdi:arrow-left`;
+- approximately 44×44 pt touch target or larger;
+- explicit Home Assistant navigation to declared `parent_path`;
+- browser history is not the canonical application navigation contract;
+- hold/double-tap never perform device actions.
 
-Browser-history semantics are not an application navigation contract.
+### 2.2 Title
 
-Canonical parent routes:
+- title is geometrically centered relative to the **viewport**, not simply the free space between left/right controls;
+- on the primary iPhone viewport it should fit on one line;
+- short subtitle may show model/context/UI version;
+- version is secondary metadata;
+- do not repeat another large device/panel title immediately below the Header.
+
+### 2.3 Header icon policy
+
+Do **not** place a decorative integration/device/brand icon beside the Header title.
+
+It shifts the visual center and competes with Back. Such icons remain valid in sidebar entries, launcher cards, status cards and navigation metadata, but not in the standard Header title area.
+
+### 2.4 Right Header zone
+
+- normally one global action such as Refresh;
+- optional overflow `⋮` only when genuinely needed;
+- left/right control zones should use comparable geometry to preserve visual balance and viewport-centered title alignment.
+
+## 3. Canonical parent routes
 
 | Specialized panel | parent_path |
 | --- | --- |
-| HO-SC-8W Irrigation | `/dashboard-actions` |
+| HO-SC-8W / Полив | `/dashboard-actions` |
 | S8 OMNI | `/dashboard-actions` |
 | Keenetic Hero 4G+ | `/dashboard-infrastructure/overview` |
-| Stark SolarPower UPS | `/dashboard-infrastructure/overview` |
+| Stark SolarPower / UPS | `/dashboard-infrastructure/overview` |
 
-The Back touch target should be approximately 44×44 pt or larger.
+Back always exits to the declared parent route regardless of whether the panel was opened from sidebar, a central dashboard, notification or deep link.
 
-Header hold/double-tap must not execute device actions.
+## 4. Bottom Tab Bar
 
-## 3. Main sections — Bottom Tab Bar only
-
-Primary-section navigation belongs at the bottom of the viewport.
-
-Top-tab patterns such as:
-
-```text
-Overview | Zones | Programs | Diagnostics
-```
-
-must not be used as the primary navigation pattern.
-
-### Docked geometry
-
-The canonical Tab Bar is the **full-width docked bar** variant.
-
-It must:
-
-- occupy the full useful width of the viewport;
-- be fixed to the lower viewport edge;
-- remain available while the page scrolls vertically;
-- include iOS bottom Safe Area;
-- not float as a detached card over content;
-- not disappear during normal vertical scrolling;
-- use large touch targets suitable for one-handed operation;
-- use icon + short label;
-- leave enough page-bottom padding so the final content card can scroll completely above the bar;
-- use consistent height and geometry across all NikaS specialized panels.
-
-Floating navigation bars/cards over page content are not compliant.
-
-## 4. Active tab
-
-The active section is indicated **inside the common Tab Bar**, not as a visually detached floating card.
-
-Preferred treatment:
-
-- accent icon color;
-- accent text color;
-- light local background;
-- optional soft local corner radius;
-- no detached elevation/shadow;
-- no vertical translation that visually lifts the active tab out of the bar.
-
-## 5. Navigation levels
-
-Meanings are fixed across all specialized panels:
-
-- **Header Back** → exit the specialized application to its declared parent route.
-- **Bottom Tab Bar** → switch between main sections of the current specialized application.
-
-Internal section changes never change the meaning of Back.
-
-## 6. First-screen rule
-
-Immediately after the Header, the user should see the domain state, not another navigation layer.
-
-Priority:
-
-```text
-HEADER
-↓
-MAIN CURRENT STATE
-↓
-PRIMARY ACTIONS / TELEMETRY
-↓
-CONTENT
-↓
-BOTTOM TAB BAR
-```
-
-The first screen should answer: **what is happening now, and is everything normal?**
-
-## 7. Avoid duplicate titles
-
-The Header tells the user where they are.
-
-The first hero/status card tells the user what is happening.
-
-Avoid repeating a large panel/device title directly below the Header.
-
-UI/integration versions belong in Diagnostics or compact secondary metadata.
-
-## 8. Mobile-first acceptance
-
-Primary acceptance device: **iPhone Pro Max in portrait orientation**.
+When an application has 3–5 main sections, they are switched only through a **full-width fixed Bottom Tab Bar**.
 
 Required:
 
-- no horizontal scrolling;
-- no clipped labels;
-- primary interactions reachable one-handed;
-- natural vertical scrolling;
-- adequate spacing between critical controls;
-- Header remains compact;
-- Bottom Tab Bar does not cover content;
-- last content card can fully scroll above the Bottom Tab Bar;
-- iOS top and bottom Safe Areas are handled explicitly.
+- fixed to the lower viewport edge;
+- occupies the full useful width of the mobile viewport;
+- no external side/bottom gaps as in a floating/pill card;
+- remains available during vertical scrolling;
+- includes iOS bottom Safe Area;
+- active tab is highlighted inside the shared bar;
+- icon + short label;
+- enough page-bottom clearance for the final content card to scroll completely above the bar;
+- consistent height and touch-target geometry across specialized panels.
 
-Tablet and desktop are secondary adaptations after mobile acceptance.
+A floating Tab Bar with visible outer gaps is non-compliant.
 
-## 9. Shared identity, domain-specific content
+### 4.1 Active tab
 
-The panels are not visually identical applications.
+Preferred treatment:
 
-Shared across the ecosystem:
+- accent icon;
+- accent text;
+- light local active background;
+- optional soft corner radius inside the common bar;
+- no detached elevation/shadow;
+- no vertical lift that visually removes the active tab from the bar.
 
-- Header geometry and Back placement;
-- touch-target geometry;
-- full-width docked Bottom Tab Bar;
-- active-tab indication;
-- Safe Area handling;
-- navigation semantics;
-- `unknown` / `unavailable` handling;
-- long-press behavior.
+### 4.2 Canonical tab sets
 
-Device-specific identity and workflows remain specialized.
+| Application | Bottom Tab Bar |
+| --- | --- |
+| HO-SC-8W | `Обзор · Зоны · Программы · Диагн.` |
+| S8 OMNI | `Обзор · Уборка · Станция · Сервис · Диагн.` |
+| Stark SolarPower | `Обзор · Диагностика · История` |
+| Keenetic Hero 4G+ | `Обзор · WAN/LTE · Трафик · Диагн.` |
 
-## 10. Recommended Tab Bar contents
-
-### HO-SC-8W Irrigation
-
-```text
-Обзор · Зоны · Программы · Диагн.
-```
-
-### S8 OMNI
-
-```text
-Обзор · Уборка · Станция · Сервис · Диагн.
-```
-
-### Stark SolarPower
-
-```text
-Обзор · Диагностика · История
-```
-
-### Keenetic Hero 4G+
-
-```text
-Обзор · WAN/LTE · Трафик · Диагн.
-```
-
-Optional when Failover becomes a complete workflow:
+Keenetic may add `Failover` as a fifth tab only when it becomes an independent full workflow:
 
 ```text
 Обзор · WAN/LTE · Failover · Трафик · Диагн.
 ```
 
-Prefer 3–5 primary sections. Additional functions belong in Service, Diagnostics or drill-down screens rather than shrinking the Tab Bar below comfortable touch sizes.
+Prefer 3–5 tabs. Additional functions belong inside Service, Diagnostics or drill-down screens rather than shrinking tab touch targets.
 
-## 11. Long press
+## 5. Multi-device context — Device Selector
 
-For factual Home Assistant entity-backed UI:
+When one integration-owned application manages multiple equal peer physical devices of the same type, device selection becomes a persistent UI level directly below the Header.
 
 ```text
-Long press → standard Home Assistant more-info
+HEADER
+↓
+DEVICE SELECTOR
+↓
+CONTENT OF SELECTED DEVICE
+↓
+BOTTOM TAB BAR
 ```
 
-Header and Bottom Tab Bar are navigation elements and never trigger entity-specific actions.
+Required behavior:
 
-## 12. Safety
+- visible directly below Header on every main section;
+- fixed device order that does not change when selection changes;
+- selected device indicated only through active state;
+- small status dot/badge for other devices is allowed;
+- selected device persists across Bottom Tab Bar section changes;
+- selector does not appear on one section and disappear on another;
+- all primary content below the selector belongs only to the selected device;
+- do not stack full cards/history views for every peer device on the same main screen.
 
-Navigation refactoring must never weaken integration safety boundaries.
+### 5.1 Device Selector is not appropriate for
 
-Prohibited:
+- irrigation zones of one HO-SC-8W controller;
+- S8 OMNI robot + station when they form one system;
+- Ethernet + LTE channels of one Keenetic router;
+- any application with only one physical device.
 
-- raw Tuya DP writes from frontend/Lovelace;
-- direct RCI/SNMP write workarounds;
-- bypassing integration APIs;
-- synthesizing unverified controls;
-- treating `unknown` / `unavailable` as normal/off;
-- fake entities/actions;
-- converting decorative Header elements into device-control shortcuts.
+## 6. Stark SolarPower — multi-device reference
 
-All writes must go through stable, tested APIs published by the owning integration.
+Stark SolarPower is the reference implementation of persistent device context.
 
-## 13. Acceptance criterion
+Canonical structure:
 
-A specialized panel is compliant only when:
+```text
+[←]          Stark SolarPower          [Refresh]
+                 UPS · UI vX.X.X
+[ UPS Интернет ] [ UPS Котёл ]
+----------------------------------------
+CONTENT OF SELECTED UPS
+----------------------------------------
+Обзор | Диагностика | История
+```
 
-> A compact Header with explicit Back is always available at the top, while all primary sections are switched through a full-width fixed Bottom Tab Bar that is part of the application shell, does not float over content, respects iOS Safe Area, and remains available during vertical scrolling.
+Rules:
 
-This is the common navigation contract for integration-owned panels in the Home Assistant NikaS ecosystem.
+- `UPS Интернет` / `UPS Котёл` always remain in the same order;
+- selection persists across Overview / Diagnostics / History;
+- selector may show compact green/yellow/red status dots for both UPS devices;
+- Overview renders one full card for the selected UPS;
+- Diagnostics renders only selected UPS data;
+- History renders only selected UPS graphs/events;
+- do not duplicate the second full UPS block below.
+
+## 7. Screen hierarchy
+
+### Single-device
+
+```text
+HEADER
+↓
+PRIMARY STATUS
+↓
+FREQUENT ACTIONS / KEY TELEMETRY
+↓
+DOMAIN CONTENT
+↓
+BOTTOM TAB BAR
+```
+
+### Multi-device
+
+```text
+HEADER
+↓
+DEVICE SELECTOR
+↓
+PRIMARY STATUS OF SELECTED DEVICE
+↓
+FREQUENT ACTIONS / KEY TELEMETRY
+↓
+DOMAIN CONTENT OF SELECTED DEVICE
+↓
+BOTTOM TAB BAR
+```
+
+Within a few seconds, the user should understand what is happening and whether the current system/device is normal.
+
+## 8. Mobile-first acceptance
+
+Primary acceptance viewport: **iPhone Pro Max, portrait**.
+
+Required:
+
+- no horizontal scrolling;
+- no clipped primary labels;
+- common actions and navigation reachable one-handed;
+- compact Header;
+- Device Selector must not unnecessarily push primary status below the first useful viewport;
+- Bottom Tab Bar must not cover content;
+- sufficient bottom clearance for the last card;
+- iOS Safe Areas handled;
+- readable light and dark themes;
+- iPad/desktop are adaptations of the accepted mobile hierarchy, not the original design target.
+
+## 9. Entity behavior and safety
+
+- no raw Tuya DP writes from frontend/Lovelace;
+- no direct RCI/SNMP write workaround bypassing the owning integration API;
+- no fake entity IDs or unverified commands;
+- `unknown` / `unavailable` are never normal states;
+- control is exposed only through stable public APIs of the owning integration;
+- long press on factual entity-backed UI should open standard Home Assistant more-info where applicable;
+- Header, Device Selector and Bottom Tab Bar never perform unrelated domain actions.
+
+## 10. Conceptual navigation metadata
+
+Single-device example:
+
+```yaml
+panel:
+  id: irrigation
+  title: Полив
+  path: /dashboard-irrigation
+  icon: mdi:sprinkler
+  owner: ha-ho-sc-8w
+  expose_in_generated_ui: true
+  preferred_view: overview
+  header:
+    title_alignment: viewport_center
+    show_brand_icon: false
+    back:
+      icon: mdi:arrow-left
+      parent_path: /dashboard-actions
+  navigation:
+    primary: full_width_fixed_bottom_tab_bar
+    floating: false
+```
+
+Multi-device applications add:
+
+```yaml
+device_context:
+  selector: persistent_below_header
+  preserve_across_views: true
+  reorder_selected: false
+  content_scope: selected_device_only
+```
+
+## 11. Panel-specific requirements
+
+### 11.1 Stark SolarPower / UPS
+
+- remove decorative battery/brand icon from Header;
+- geometrically center `Stark SolarPower`;
+- secondary centered subtitle `UPS · UI v…`;
+- Back left, Refresh right;
+- persistent `UPS Интернет / UPS Котёл` Device Selector on all three sections;
+- preserve selection across tabs;
+- Overview / Diagnostics / History render selected UPS only;
+- Bottom Tab Bar: `Обзор · Диагностика · История`.
+
+### 11.2 S8 OMNI
+
+- explicit Back replaces hamburger/Menu as the primary exit;
+- geometrically center `S8 OMNI`;
+- no decorative robot/integration icon beside Header title;
+- full-width Bottom Tab Bar: `Обзор · Уборка · Станция · Сервис · Диагн.`;
+- composite robot + station state remains hero information;
+- no Device Selector while one S8 OMNI system is managed.
+
+### 11.3 HO-SC-8W / Полив
+
+- explicit Back;
+- geometrically centered `Полив`;
+- model/UI version in secondary subtitle;
+- no decorative water/sprinkler icon in Header title area;
+- water/sprinkler icon remains valid inside status/navigation content;
+- Bottom Tab Bar: `Обзор · Зоны · Программы · Диагн.`;
+- irrigation zones are channels, not peer devices, therefore no Device Selector.
+
+### 11.4 Keenetic Hero 4G+
+
+- build directly against this standard;
+- Back left, centered title, optional Refresh/overflow right;
+- no router icon beside Header title;
+- full-width fixed Bottom Tab Bar;
+- first screen prioritizes Internet / active WAN / Ethernet / LTE / recent failover;
+- Ethernet/LTE are channels, not peer devices, therefore no Device Selector.
+
+## 12. Acceptance checklist
+
+A specialized panel is compliant only when all applicable conditions are met:
+
+- Header present on every main screen;
+- explicit Back targets declared parent route;
+- title geometrically centered on iPhone Pro Max portrait;
+- no decorative brand/device icon shifts Header title;
+- right global action does not disturb centering;
+- no duplicate large title immediately below Header;
+- 3–5 main sections use full-width fixed Bottom Tab Bar;
+- Tab Bar is docked, not floating;
+- active tab is unambiguous and remains inside the common bar;
+- final content scrolls fully above the Tab Bar;
+- when multiple peer devices exist, Device Selector is persistent on all sections;
+- device selection persists between sections;
+- device order is stable;
+- primary content is scoped to selected device only;
+- `unknown` / `unavailable` remain visibly unreliable;
+- navigation elements cannot accidentally execute unrelated device actions.
+
+## 13. Project rule
+
+Integration-owned dashboards are mobile applications inside Home Assistant: explicit Back at the top, viewport-centered title without a decorative Header icon, persistent Device Selector only when multiple peer physical devices require context, selected-device-only content, and a full-width fixed Bottom Tab Bar for internal navigation.
