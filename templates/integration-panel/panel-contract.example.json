@@ -1,0 +1,57 @@
+{
+  "template": {
+    "name": "NikaS Integration Panel Template",
+    "version": "1.0"
+  },
+  "panel": {
+    "id": "example",
+    "title": "Example Panel",
+    "subtitle": "Subsystem · UI v0.1.0",
+    "path": "/dashboard-example",
+    "parent_path": "/dashboard-infrastructure/overview",
+    "owner": "ha-example",
+    "header": {
+      "back": {
+        "icon": "mdi:arrow-left",
+        "mode": "explicit_parent_route"
+      },
+      "title_alignment": "viewport_center",
+      "show_brand_icon": false,
+      "right_action": "refresh"
+    },
+    "device_context": {
+      "enabled": false,
+      "placement": "below_header",
+      "preserve_across_views": true,
+      "reorder_selected": false,
+      "content_scope": "selected_device_only"
+    },
+    "navigation": {
+      "type": "full_width_fixed_bottom_tab_bar",
+      "floating": false,
+      "views": [
+        {
+          "id": "overview",
+          "label": "Обзор",
+          "icon": "mdi:home-outline"
+        },
+        {
+          "id": "control",
+          "label": "Управление",
+          "icon": "mdi:tune-variant"
+        },
+        {
+          "id": "diagnostics",
+          "label": "Диагностика",
+          "icon": "mdi:stethoscope"
+        }
+      ]
+    },
+    "frontend": {
+      "production_bundle": "example-panel.js",
+      "self_contained": true,
+      "historical_runtime_imports": false,
+      "cache_busting": "query_version"
+    }
+  }
+}
