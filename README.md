@@ -17,6 +17,7 @@ The goal is to keep contribution, support, security, issue, pull-request, reposi
 - `.github/ISSUE_TEMPLATE/` — structured bug and feature request forms.
 - `REPOSITORY_STANDARD.md` — common repository structure and release expectations.
 - `SPECIALIZED_PANEL_UI_STANDARD.md` — mandatory mobile-first application-shell contract for integration-owned Home Assistant panels.
+- `SPECIALIZED_PANEL_FRONTEND_RELEASE_STANDARD.md` — mandatory self-contained production-bundle and cold-load reliability contract for specialized Home Assistant panels.
 
 ## Repository-specific overrides
 
@@ -30,3 +31,4 @@ A project repository may provide its own file or issue-template directory when i
 4. Releases are traceable to source commits and versioned artifacts.
 5. Automation must fail visibly rather than silently accepting invalid state.
 6. Integration-owned Home Assistant panels use the shared NikaS specialized-panel application shell unless explicitly exempted by architecture decision.
+7. Every specialized production panel loads from one self-contained project-owned JavaScript bundle; previous UI versions are never runtime dependencies.
