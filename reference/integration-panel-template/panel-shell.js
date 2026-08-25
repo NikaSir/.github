@@ -1,10 +1,12 @@
 /*
- * NikaS Integration Panel Template v1.1 — reference implementation.
+ * NikaS Integration Panel Template v1.2 — structural reference.
  *
  * DEVELOPMENT-TIME REFERENCE ONLY.
  * Copy/vendor into an integration source tree and bundle into that integration's
  * own self-contained production frontend. Do not import this file at runtime
  * from another repository.
+ * Production adoption must attach the transform-owned canvas controller and
+ * interaction guards required by Zoom Standard v1.4.
  */
 
 export class NikaSPanelShell extends HTMLElement {
@@ -315,9 +317,11 @@ export class NikaSPanelShell extends HTMLElement {
       <style>${this.styles()}</style>
       <div class="panelShell">
         ${this.appHeader()}
-        <main class="panelContent zoomViewport" data-zoom-viewport>
-          ${this.deviceContextSelector()}
-          ${body}
+        ${this.deviceContextSelector()}
+        <main class="canvasViewport" data-zoom-viewport data-engine="transform-owned-canvas">
+          <div class="canvasContent" data-zoom-content>
+            ${body}
+          </div>
         </main>
       </div>
       ${this.bottomTabBar()}
@@ -345,10 +349,10 @@ export class NikaSPanelShell extends HTMLElement {
       }
       *{box-sizing:border-box}
       button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
-      .panelShell{min-height:100vh;max-width:1280px;margin:0 auto;padding:0 16px calc(104px + env(safe-area-inset-bottom))}
+      .panelShell{height:100dvh;min-height:0;max-width:1280px;margin:0 auto;padding:0 16px calc(104px + env(safe-area-inset-bottom));display:grid;grid-template-rows:auto auto minmax(0,1fr);overflow:hidden}
       .appHeader{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:52px minmax(0,1fr) 52px;align-items:center;min-height:58px;padding:calc(4px + env(safe-area-inset-top)) 0 4px;background:color-mix(in srgb,var(--nikas-bg) 96%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
       .headerSlot{display:grid;place-items:center;width:52px;min-height:44px;border:0;background:transparent;color:var(--nikas-primary);cursor:pointer}.headerSlot ha-icon{--mdc-icon-size:25px}.headerPlaceholder{pointer-events:none}.headerTitle{text-align:center;min-width:0}.headerTitle strong{display:block;overflow:hidden;font-size:18px;line-height:1.08;text-overflow:ellipsis;white-space:nowrap}.headerTitle small{display:block;margin-top:2px;overflow:hidden;color:var(--nikas-muted);font-size:10px;text-overflow:ellipsis;white-space:nowrap}
-      .panelContent{padding-top:8px}.deviceSelector{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:2px}.deviceChoice{display:flex;align-items:center;gap:7px;min-height:44px;padding:0 13px;border:1px solid var(--nikas-divider);border-radius:15px;background:var(--nikas-card);white-space:nowrap}.deviceChoice.active{border-color:color-mix(in srgb,var(--nikas-primary) 55%,var(--nikas-divider));background:color-mix(in srgb,var(--nikas-primary) 9%,var(--nikas-card));color:var(--nikas-primary)}.statusDot{width:8px;height:8px;border-radius:50%;background:#9a9a9a}.statusDot.normal{background:var(--nikas-normal)}.statusDot.warning{background:var(--nikas-warning)}.statusDot.error{background:var(--nikas-error)}.statusDot.info{background:var(--nikas-primary)}
+      .canvasViewport{position:relative;min-width:0;min-height:0;overflow:hidden;touch-action:none;overscroll-behavior:none;padding-top:8px}.canvasContent{transform-origin:0 0;transform:translate3d(0,0,0) scale(1);will-change:transform}.deviceSelector{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:2px}.deviceChoice{display:flex;align-items:center;gap:7px;min-height:44px;padding:0 13px;border:1px solid var(--nikas-divider);border-radius:15px;background:var(--nikas-card);white-space:nowrap}.deviceChoice.active{border-color:color-mix(in srgb,var(--nikas-primary) 55%,var(--nikas-divider));background:color-mix(in srgb,var(--nikas-primary) 9%,var(--nikas-card));color:var(--nikas-primary)}.statusDot{width:8px;height:8px;border-radius:50%;background:#9a9a9a}.statusDot.normal{background:var(--nikas-normal)}.statusDot.warning{background:var(--nikas-warning)}.statusDot.error{background:var(--nikas-error)}.statusDot.info{background:var(--nikas-primary)}
       .heroStatus,.statusCard,.metricCard,.stateRow,.actionCard,.alertCard,.contentCard,.loadingCard{border:1px solid var(--nikas-divider);border-radius:22px;background:var(--nikas-card)}
       .heroStatus{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center;gap:14px;padding:18px}.heroIcon{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:color-mix(in srgb,var(--nikas-primary) 12%,var(--nikas-card));color:var(--nikas-primary)}.heroIcon ha-icon{--mdc-icon-size:28px}.heroText h1{margin:0;font-size:25px;letter-spacing:-.035em}.heroText p{margin:3px 0 0;color:var(--nikas-muted);font-size:14px}.heroStatus.normal .heroIcon{background:color-mix(in srgb,var(--nikas-normal) 12%,var(--nikas-card));color:var(--nikas-normal)}.heroStatus.warning .heroIcon{background:color-mix(in srgb,var(--nikas-warning) 12%,var(--nikas-card));color:var(--nikas-warning)}.heroStatus.error .heroIcon{background:color-mix(in srgb,var(--nikas-error) 12%,var(--nikas-card));color:var(--nikas-error)}.heroStatus.unknown .heroIcon{color:var(--nikas-muted)}.heroBadge{padding:6px 9px;border-radius:99px;background:color-mix(in srgb,var(--nikas-primary) 9%,var(--nikas-card));font-size:11px}
       .statusCard{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;min-height:66px;padding:12px 16px;text-align:left}.statusCard strong,.statusCard small{display:block}.statusCard small{margin-top:3px;color:var(--nikas-muted);font-size:11px}.statusCard>b{font-size:14px}.semantic-normal>b{color:var(--nikas-normal)}.semantic-warning>b{color:var(--nikas-warning)}.semantic-error>b{color:var(--nikas-error)}.semantic-unknown>b{color:var(--nikas-muted)}
