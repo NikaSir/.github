@@ -7,7 +7,7 @@ The canonical contract is `NIKAS_INTEGRATION_PANEL_TEMPLATE.md`.
 ## How to use it
 
 1. Copy/vendor `panel-shell.js` into the integration frontend source tree.
-2. Rename the custom element and configure title, subtitle/model, `parentPath` and tabs.
+2. Rename the custom element and configure title, subtitle/model, tabs and any parent/drill-down action inside the work area.
 3. Replace `renderOverview()` and other view methods with domain-specific content.
 4. Keep the common Header, BottomTabBar, semantic-state and primitive geometry unless the project standard itself changes.
 5. Bundle all integration frontend source into the integration's own autonomous production artifact.
@@ -41,9 +41,10 @@ Each integration remains independently deployable and compliant with `SPECIALIZE
 The reference contains:
 
 - `PanelShell` lifecycle and Home Assistant panel setters;
-- symmetric icon-only `AppHeader`;
+- symmetric `AppHeader` with a permanent Home Assistant `☰` control dispatching `hass-toggle-menu`;
 - explicit parent navigation;
 - optional `DeviceContextSelector` helper;
+- one work-viewport hook for the canonical gesture-only zoom controller;
 - `HeroStatus` helper;
 - `StatusCard`, `MetricCard`, `StateRow`, `ActionCard`, `AlertCard` helpers;
 - fixed full-width iOS-safe `BottomTabBar`;
