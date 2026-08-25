@@ -119,10 +119,17 @@ A specialized frontend release is ready only after successful verification of:
 4. full Home Assistant restart followed by panel load;
 5. repeated panel opens;
 6. navigation into the panel from its parent dashboard;
-7. explicit Header Back navigation;
-8. no `Unable to load custom panel`;
-9. no `Configuration error`;
-10. no runtime dependency on files from previous UI versions.
+7. permanent left Header button opens the native Home Assistant menu through `hass-toggle-menu`;
+8. Header remains below notch/Dynamic Island with no duplicated safe-area band;
+9. exactly one zoom viewport and one gesture-handler set remain after repeated rerenders;
+10. two-finger focal-point pinch and pan/scroll work on touch clients;
+11. two-finger double tap resets scale and work-area scroll to 100%;
+12. a completed 97–103% pinch snaps to exactly 100%;
+13. reset/snap briefly confirms `Масштаб 100%`;
+14. no permanent on-screen `− / % / +` zoom toolbar is rendered;
+15. no `Unable to load custom panel`;
+16. no `Configuration error`;
+17. no runtime dependency on files from previous UI versions.
 
 ## 10. Release/version requirements
 
