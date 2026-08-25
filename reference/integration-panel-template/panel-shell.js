@@ -1,5 +1,5 @@
 /*
- * NikaS Integration Panel Template v1.0 — reference implementation.
+ * NikaS Integration Panel Template v1.1 — reference implementation.
  *
  * DEVELOPMENT-TIME REFERENCE ONLY.
  * Copy/vendor into an integration source tree and bundle into that integration's
@@ -99,8 +99,13 @@ export class NikaSPanelShell extends HTMLElement {
     );
   }
 
-  goBack() {
-    this.explicitNavigate(this.parentPath());
+  toggleHomeAssistantMenu() {
+    this.dispatchEvent(
+      new CustomEvent("hass-toggle-menu", {
+        bubbles: true,
+        composed: true,
+      }),
+    );
   }
 
   moreInfo(entityId) {
@@ -130,8 +135,8 @@ export class NikaSPanelShell extends HTMLElement {
     const action = this.headerAction();
     return `
       <header class="appHeader">
-        <button class="headerSlot headerBack" data-back aria-label="Назад">
-          <ha-icon icon="mdi:arrow-left"></ha-icon>
+        <button class="headerSlot headerMenu" data-ha-menu aria-label="Открыть меню Home Assistant">
+          <ha-icon icon="mdi:menu"></ha-icon>
         </button>
         <div class="headerTitle">
           <strong>${this.escape(this.panelTitle())}</strong>
@@ -254,7 +259,7 @@ export class NikaSPanelShell extends HTMLElement {
   // ----- Binding ------------------------------------------------------------
 
   bindShellActions() {
-    this.shadowRoot.querySelector("[data-back]")?.addEventListener("click", () => this.goBack());
+    this.shadowRoot.querySelector("[data-ha-menu]")?.addEventListener("click", () => this.toggleHomeAssistantMenu());
 
     const action = this.headerAction();
     if (action?.action) {
@@ -310,7 +315,7 @@ export class NikaSPanelShell extends HTMLElement {
       <style>${this.styles()}</style>
       <div class="panelShell">
         ${this.appHeader()}
-        <main class="panelContent">
+        <main class="panelContent zoomViewport" data-zoom-viewport>
           ${this.deviceContextSelector()}
           ${body}
         </main>
