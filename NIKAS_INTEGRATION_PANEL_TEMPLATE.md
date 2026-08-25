@@ -1,8 +1,8 @@
-# NikaS Integration Panel Template v1.0
+# NikaS Integration Panel Template v1.1
 
 Status: **mandatory for all specialized integration-owned panels**  
 Primary target: **iPhone Pro Max · portrait · one-handed use**  
-Revision: **2026-08-22**
+Revision: **2026-08-25**
 
 ## 1. Purpose and scope
 
@@ -18,7 +18,7 @@ Every primary view follows this order:
 
 ```text
 ┌─────────────────────────────────────────────┐
-│ ←              PANEL TITLE            ↻ / ⋮ │
+│ ☰              PANEL TITLE            ↻ / ⋮ │
 │                subtitle · UI vX.Y.Z         │
 ├─────────────────────────────────────────────┤
 │   DeviceContextSelector (optional)          │
@@ -50,22 +50,21 @@ On narrow mobile layouts it may use:
 
 ### Left slot
 
-The left slot always contains an icon-only Back control:
+The left slot always contains the Home Assistant main-system menu control:
 
 ```text
-←
+☰
 ```
 
 Requirements:
 
 - minimum touch target: 44 × 44 px;
-- icon: `mdi:arrow-left` or the Home Assistant-equivalent arrow glyph;
-- no visible `Назад` text in the standardized Header;
-- Back uses explicit Home Assistant navigation to the declared `parent_path`;
-- browser history is not the navigation contract;
+- icon: `mdi:menu` or the native Home Assistant menu glyph;
+- activation dispatches `new CustomEvent("hass-toggle-menu", { bubbles: true, composed: true })`;
+- it is never Back, browser history, an integration drawer or a device action;
+- parent or drill-down navigation, when required, is placed inside the work area;
+- the menu button remains at native scale and below the effective top safe area;
 - hold and double tap do not execute device actions.
-
-Canonical parent paths remain defined by the specialized-panel UI standard.
 
 ### Center slot
 
@@ -407,7 +406,7 @@ Every implementation should map to these concepts:
 PanelShell
 │
 ├── AppHeader
-│   ├── BackButton
+│   ├── HomeAssistantMenuButton (`hass-toggle-menu`)
 │   ├── Title
 │   ├── Subtitle / UI version
 │   └── HeaderAction
@@ -437,7 +436,7 @@ Preserve UPS selector, Hero and `Сеть → UPS → Нагрузка` subject 
 
 ### HO-SC-8W
 
-Preserve compact operational status, next watering and zone workflow. Standardize icon-only Back, symmetric Header slots and shared BottomTabBar style.
+Preserve compact operational status, next watering and zone workflow. Standardize the Home Assistant `☰` menu control, symmetric Header slots and shared BottomTabBar style.
 
 ### S8 OMNI
 
@@ -456,16 +455,30 @@ Adopt the template from the first public specialized-panel release.
 A specialized-panel developer chooses only:
 
 1. panel title and subtitle/model;
-2. declared `parent_path`;
+2. optional parent/drill-down navigation placed inside the work area;
 3. whether a DeviceContextSelector is needed;
 4. HeroStatus semantics;
 5. ViewContent for each tab;
 6. tab set within the 3–5 rule;
 7. domain-specific diagrams and actions.
 
-Header geometry, Back behavior, shared typography, card geometry, state semantics, BottomTabBar behavior, loading shell, long-press convention and production-bundle rules are common project infrastructure.
+Header geometry, `hass-toggle-menu` behavior, shared typography, card geometry, state semantics, BottomTabBar behavior, zoom lifecycle, loading shell, long-press convention and production-bundle rules are common project infrastructure.
 
-## 25. Acceptance effect
+## 25. Zoom behavior
+
+Every specialized panel contains exactly one zoomable work viewport.
+
+- only work content scales;
+- Header, Home Assistant menu button, DeviceContextSelector and BottomTabBar remain at native scale;
+- the normal mobile interaction is two-finger focal-point pinch with pan/scroll when enlarged;
+- permanent on-screen `− / % / +` controls are not used;
+- a pinch ending at 97–103% snaps to exactly 100%;
+- a two-finger double tap resets scale and work-area scroll to 100%;
+- reset/snap briefly shows the native-scale confirmation `Масштаб 100%`;
+- scale persists locally per panel/client and per peer device where applicable;
+- rerender reconciliation is idempotent: never re-wrap an existing zoom viewport or duplicate gesture handlers.
+
+## 26. Acceptance effect
 
 When moving through:
 
