@@ -1,5 +1,7 @@
 # Home Assistant NikaS — Integration Dashboard UI Standard v1.2
 
+> **SUPERSEDED:** use `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.5. Any explicit Back, old zoom/pan, Header, Bottom Tab Bar or brand rule below is historical.
+
 Status: **mandatory project-wide UI contract**  
 Revision: **2026-08-22**  
 Primary acceptance viewport: **iPhone Pro Max · portrait · one-handed operation**
