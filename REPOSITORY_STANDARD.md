@@ -51,23 +51,17 @@ Every maintained project repository should have:
 - `.gitignore`
 - `docs/RELEASES.md`
 
-Home Assistant repositories add HACS/Hassfest/release validation only when the real `custom_components/<domain>/` implementation is present.
+Home Assistant repositories add HACS, Hassfest and artifact validation only when the real `custom_components/<domain>/` implementation is present.
 
-## Project and integration identity
+## Publication
 
-- Every maintained project repository contains a recognizable repository identity asset, normally `assets/icon.png` or a documented equivalent, and shows the same identity in README/project surfaces.
-- Every shipped Home Assistant integration contains a non-empty `custom_components/<domain>/brand/icon.png`.
-- Add `brand/logo.png`, `brand/dark_icon.png` and `brand/dark_logo.png` when theme legibility requires them.
-- Repository, README, HACS and installed-integration identities must not use unrelated marks.
-- A bootstrap repository may ship only its repository icon until the integration package exists; the packaged brand icon becomes mandatory with `custom_components/<domain>`.
-
-## Releases
-
-- Tags are immutable once published.
-- A release is made from committed, reviewed source.
+- Published tags are immutable.
+- NikaS panel and integration changes are delivered through committed, reviewed branches and pull requests.
+- GitHub Releases are not created for this workflow.
+- Built/versioned artifacts remain traceable to their source commit and are validated before merge.
 - Existing project version lineage is preserved during GitHub migration.
-- A migration/bootstrap commit is not itself a functional product release.
+- A migration/bootstrap commit is not itself a functional product publication.
 
 ## License
 
-A repository must receive an explicit license decision before its first public functional release. Do not infer or silently change a project's license from repository visibility alone.
+A repository must receive an explicit license decision before its first public functional publication. Do not infer or silently change a project's license from repository visibility alone.

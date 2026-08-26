@@ -1,0 +1,48 @@
+name: Standards checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate copy/adapt JavaScript
+        run: |
+          node --check reference/integration-panel-template/zoom-controller-reference.js
+          node --check reference/integration-panel-template/panel-shell.js
+      - name: Validate v1.6 contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path(".")
+          standard = (root / "NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md").read_text(encoding="utf-8")
+          shell = (root / "reference/integration-panel-template/panel-shell.js").read_text(encoding="utf-8")
+          zoom = (root / "reference/integration-panel-template/zoom-controller-reference.js").read_text(encoding="utf-8")
+          contract = json.loads((root / "reference/integration-panel-template/panel-contract.example.json").read_text(encoding="utf-8"))
+
+          for token in ("v1.6", "hass-toggle-menu", "12–25px", "Локально", "Данные актуальны", "GitHub Releases are not used"):
+              assert token in standard, token
+          for token in ('icon="mdi:menu"', "font-size:23px", "font-size:14px", "--mdc-icon-size:28px", 'class="canvas-viewport"'):
+              assert token in shell, token
+          assert "mdi:arrow-left" not in shell
+          assert shell.count('class="canvas-viewport"') == 1
+          assert "const DEFAULT_MIN = 0.75" in zoom
+          assert "const DEFAULT_MAX = 2.0" in zoom
+          assert "this.host?._selectedDeviceId || this.host?._selectedDevice" in zoom
+          assert contract["header"]["left_event"] == "hass-toggle-menu"
+          assert contract["zoom"]["range_percent"] == [75, 200]
+          assert contract["rendering"]["routine_shadow_root_replacement"] is False
+          assert contract["connection_indicator"]["enabled"] is False
+          PY

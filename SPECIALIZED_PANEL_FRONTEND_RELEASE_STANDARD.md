@@ -1,152 +1,41 @@
-# Home Assistant NikaS — Specialized Panel Frontend Release Standard
+# NikaS Specialized Panel Frontend Delivery Standard v1.6
 
-> **UPDATED AUTHORITY:** Header/navigation/zoom acceptance is defined by `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.5; any Back-specific language below is superseded.
+**Status:** required for every integration-owned Home Assistant specialized panel
+**UI authority:** [`NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md`](NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md) v1.6
 
-Status: **mandatory for all new specialized-panel releases**  
-Revision: **2026-08-22**
+## Production artifact
 
-## 1. Scope
+One registered panel module equals one autonomous, integration-owned JavaScript bundle. The `module_url` target contains all project code needed to register and run the current panel. Runtime imports of previous panel versions or another NikaS repository are prohibited.
 
-This rule applies to every integration-owned Home Assistant frontend panel in the NikaS ecosystem, including Stark SolarPower, Keenetic, HO-SC-8W, S8 OMNI, VLESS Gateway and future integrations. It covers panels registered through `panel_custom` or an equivalent Home Assistant mechanism.
+Modular development is allowed, but the build must produce one deterministic artifact with cache busting tied to the declared UI version. History belongs in Git commits and tags, not in browser import chains.
 
-## 2. Production bundle
+## Fixed shell acceptance
 
-A production specialized panel must be delivered as **one autonomous JavaScript bundle**.
+The production bundle must implement the v1.6 application shell:
 
-The file registered by Home Assistant as `module_url` must itself contain all project-owned code required to register and run the panel.
+- fixed Home Assistant menu Header, optional fixed peer-device selector, exactly one work viewport/canvas and fixed safe-area-aware Bottom Tab Bar;
+- permanent left `mdi:menu` action dispatching bubbling/composed `hass-toggle-menu`; no permanent Header Back;
+- native vertical scrolling with `x = y = 0` at 100%, focal pinch at 75–200%, bounded one-finger pan only above 100%, 97–103% snap and stationary two-finger reset;
+- shell mounted once, telemetry point-patched, visited views lazily cached and no full-screen flash;
+- meaningful text at 12–25px and Bottom Tab Bar MDI icons/labels at 28px and 12px/700;
+- optional connection/freshness indicator only when explicitly requested, using the canonical v1.6 vocabulary and status-tinted plaque;
+- packaged repository/integration identity including `custom_components/<domain>/brand/icon.png`, minimum 256×256 RGBA.
 
-Allowed runtime shape:
+## Required verification
 
-```text
-Home Assistant
-      ↓
-integration-panel.js?v=X.Y.Z
-      ↓
-<integration-panel>
-```
+Before merge, verify:
 
-A production panel must not depend on a chain of its own previous frontend versions.
+1. local-network and Home Assistant Cloud/Nabu Casa cold loads;
+2. full Home Assistant restart followed by repeated panel opens;
+3. no `Unable to load custom panel` or `Configuration error`;
+4. no historical/runtime bundle chain;
+5. Header menu, Refresh plaque, safe areas and fixed bottom navigation;
+6. long native scrolling at 100% without horizontal or transform drift;
+7. focal pinch, axis-bounded pan, snap/reset and native long-press/more-info behavior;
+8. live telemetry, indicator transitions, tab/device changes and scroll without white frames or remount flicker;
+9. JavaScript syntax, deterministic build, version/cache-busting consistency and repository CI;
+10. real iPhone portrait acceptance.
 
-## 3. Historical-version imports are prohibited
+## Publication workflow
 
-The current production module must not import a previous panel version, for example:
-
-```js
-import "./panel-v031.js";
-```
-
-when the active production module is a later release.
-
-Previous versions belong in Git history, tags, releases, or development source modules. Version history is the responsibility of source control, not the end user's browser runtime.
-
-## 4. Source vs production artifact
-
-Frontend source may be developed modularly, for example:
-
-```text
-src/
-  shell.js
-  header.js
-  navigation.js
-  diagnostics.js
-  overview.js
-  styles.js
-```
-
-Before release, that source must produce one self-contained production artifact, for example:
-
-```text
-dist/
-  integration-panel.js
-```
-
-Development modularity must not become a cascade of project-owned HTTP imports when the panel opens.
-
-## 5. Registration
-
-`module_url` must point only to the final self-contained bundle.
-
-Preferred form:
-
-```text
-/integration_panel/integration-panel.js?v=0.4.2
-```
-
-A versioned filename is also allowed, but stable filename plus query-string cache busting is preferred for simpler registration and maintenance.
-
-## 6. Runtime dependency rule
-
-For baseline panel loading:
-
-> one registered panel module = one primary project-owned frontend load point.
-
-Sequential loading of historical or patch JavaScript files is prohibited.
-
-External dependencies are allowed only when technically necessary and must be reviewed separately as an architecture decision.
-
-## 7. Reliability rationale
-
-Every extra runtime import adds another failure point:
-
-```text
-HA → module A → module B → module C → module D
-```
-
-This is especially risky for Home Assistant Companion App, iOS WebView, Home Assistant Cloud / Nabu Casa, cold browser caches, post-update starts, post-restart starts, and slow or unstable links.
-
-Production frontend must minimize dependency on resource ordering and timing.
-
-## 8. Cache independence
-
-Panel correctness must not depend on previous frontend files already being present in browser cache.
-
-Mandatory test path:
-
-```text
-empty cache
-→ fresh HA frontend start
-→ open specialized panel
-→ panel loads correctly
-```
-
-A warm-cache reopen alone is not sufficient acceptance evidence.
-
-## 9. Release acceptance
-
-A specialized frontend release is ready only after successful verification of:
-
-1. local-network panel load;
-2. Home Assistant Cloud / Nabu Casa panel load;
-3. cold client start;
-4. full Home Assistant restart followed by panel load;
-5. repeated panel opens;
-6. navigation into the panel from its parent dashboard;
-7. explicit Header Back navigation;
-8. no `Unable to load custom panel`;
-9. no `Configuration error`;
-10. no runtime dependency on files from previous UI versions.
-
-## 10. Release/version requirements
-
-Changing frontend bundle/loading architecture is a release-significant change. It must:
-
-- receive a distinct UI version;
-- be recorded in `CHANGELOG`;
-- pass CI;
-- be tested before production publication.
-
-A hardening release may intentionally preserve the visual design while changing only packaging/loading mechanics.
-
-## 11. Project architecture principle
-
-For central dashboards — `Дом`, `Действия`, `Инфраструктура` — prefer native Lovelace components with minimal custom-frontend dependency.
-
-For specialized integration-owned panels, `panel_custom` is allowed, but the contract is:
-
-> **Specialized Panel = self-contained production frontend bundle.**
-
-Custom panels are acceptable. Fragile chains of custom frontend modules are not.
-
-## 12. Normative statement
-
-Each specialized Home Assistant panel must ship as an autonomous, deterministic production frontend bundle. The file registered as `module_url` must not depend at runtime on previous frontend versions of that panel. Change history belongs in Git, not in a JavaScript import chain. The panel must load correctly from a cold start, locally and through Home Assistant Cloud, independently of browser-cache state.
+Changes receive an explicit UI/integration version where applicable, a changelog entry and automated checks. NikaS work is published through commits, branches and pull requests. GitHub Releases are not created.
