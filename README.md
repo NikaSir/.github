@@ -2,6 +2,8 @@
 
 This repository contains the default community health and engineering-standard files used across public repositories owned by `NikaSir`.
 
+The current required specialized-panel contract is `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.5. It includes the UPS-reference Header plaques, native scrolling at 100%, overflow-axis pan above 100%, the 28px Bottom Tab Bar icon rule and mandatory integration brand assets.
+
 ## Purpose
 
 The goal is to keep contribution, support, security, issue, pull-request, repository and shared UI rules consistent across the project ecosystem while allowing individual repositories to override a default when they need project-specific behavior.

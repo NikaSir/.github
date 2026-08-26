@@ -1,5 +1,7 @@
 # Home Assistant NikaS — Specialized Panel Frontend Release Standard
 
+> **UPDATED AUTHORITY:** Header/navigation/zoom acceptance is defined by `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.5; any Back-specific language below is superseded.
+
 Status: **mandatory for all new specialized-panel releases**  
 Revision: **2026-08-22**
 
