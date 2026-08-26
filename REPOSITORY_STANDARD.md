@@ -55,7 +55,7 @@ Home Assistant repositories add HACS, Hassfest and artifact validation only when
 
 ## Publication
 
-- Published tags are immutable.
+- Automatic release tags are neither created nor required. Any existing historical tag remains immutable and is not an update channel.
 - NikaS panel and integration changes are delivered through committed, reviewed branches and pull requests.
 - GitHub Releases are not created for this workflow.
 - Built/versioned artifacts remain traceable to their source commit and are validated before merge.
