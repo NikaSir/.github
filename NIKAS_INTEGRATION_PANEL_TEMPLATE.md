@@ -1,6 +1,6 @@
 # NikaS Integration Panel Template v1.0
 
-> **SUPERSEDED FOR SHELL/ZOOM/NAVIGATION:** `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.5 is normative. Preserve compatible domain composition only.
+> **SUPERSEDED FOR SHELL/ZOOM/NAVIGATION:** `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.6 is normative. Preserve compatible domain composition only.
 
 Status: **mandatory for all specialized integration-owned panels**  
 Primary target: **iPhone Pro Max · portrait · one-handed use**  
