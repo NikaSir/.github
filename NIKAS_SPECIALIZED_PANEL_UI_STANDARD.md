@@ -43,7 +43,7 @@ Pinch is two-finger focal zoom over `75–200%`. `97–103%` snaps to 100%/origi
 
 ## Brand and repository identity
 
-- Every integration repository ships a recognizable packaged `brand/icon.png`; it is the mandatory minimum HACS brand asset.
+- Every integration repository ships a recognizable packaged `custom_components/<domain>/brand/icon.png`; it is the mandatory minimum HACS brand asset.
 - Add `logo.png`, `dark_icon.png` and `dark_logo.png` when theme legibility requires them.
 - README and installed integration use the same recognizable identity.
 - Brand art belongs in repository/HACS/HA identity surfaces, not beside the centered Header title.
@@ -51,4 +51,3 @@ Pinch is two-finger focal zoom over `75–200%`. `97–103%` snaps to 100%/origi
 ## Required audit
 
 Each repository maintains an explicit compliance record covering Header geometry and colors, 100% native scrolling, enlarged axis bounds, tab/reset behavior, Bottom Tab Bar, safe areas, one-viewport topology, interaction guards, packaged brand assets and automated checks. Gaps are documented as gaps until runtime is corrected.
-
