@@ -32,7 +32,7 @@ A project repository may provide its own file or issue-template directory when i
 1. Reproducible changes over manual edits.
 2. Small, reviewable commits and pull requests.
 3. No credentials, tokens, private keys, device secrets, or personal data in source control.
-4. Published artifacts are traceable to reviewed source commits; NikaS panel work uses branches and pull requests, not GitHub Releases.
+4. Published artifacts are traceable to reviewed source commits; NikaS panel work uses branches, pull requests and `main`, not GitHub Releases or automatic release tags.
 5. Automation must fail visibly rather than silently accepting invalid state.
 6. Integration-owned Home Assistant panels use the shared NikaS specialized-panel application shell and `NikaS Integration Panel Template` unless explicitly exempted by architecture decision.
 7. Every specialized production panel loads from one self-contained project-owned JavaScript bundle; previous UI versions are never runtime dependencies.
