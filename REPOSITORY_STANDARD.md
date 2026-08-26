@@ -53,6 +53,14 @@ Every maintained project repository should have:
 
 Home Assistant repositories add HACS/Hassfest/release validation only when the real `custom_components/<domain>/` implementation is present.
 
+## Project and integration identity
+
+- Every maintained project repository contains a recognizable repository identity asset, normally `assets/icon.png` or a documented equivalent, and shows the same identity in README/project surfaces.
+- Every shipped Home Assistant integration contains a non-empty `custom_components/<domain>/brand/icon.png`.
+- Add `brand/logo.png`, `brand/dark_icon.png` and `brand/dark_logo.png` when theme legibility requires them.
+- Repository, README, HACS and installed-integration identities must not use unrelated marks.
+- A bootstrap repository may ship only its repository icon until the integration package exists; the packaged brand icon becomes mandatory with `custom_components/<domain>`.
+
 ## Releases
 
 - Tags are immutable once published.
