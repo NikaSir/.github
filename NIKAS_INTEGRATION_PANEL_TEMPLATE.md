@@ -1,6 +1,6 @@
-# NikaS Integration Panel Template v1.6
+# NikaS Integration Panel Template v1.7
 
-> **SUPERSEDED FOR SHELL GEOMETRY AND GESTURES:** use `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.6. Domain composition guidance remains valid only when compatible with v1.6.
+> **SUPERSEDED FOR SHELL GEOMETRY AND GESTURES:** use `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.7. Domain composition guidance remains valid only when compatible with v1.7.
 
 **Status:** Required reference implementation
 **Primary target:** iPhone Pro Max, portrait
@@ -54,12 +54,12 @@ Rules:
 - menu and Refresh use matching 44×44 px, radius 16 px plaques with 25 px `ha-icon` glyphs;
 - title is geometrically centered on the viewport;
 - first line is the human application name;
-- second line is `<type/model/context> · UI vX.Y.Z`;
+- second line is exactly `UI vX.Y.Z`;
 - first/second lines are `23/14px`; narrow fallback is `21/13px`;
 - decorative brand/device icon is not placed next to the title;
 - right zone contains at most one primary global action, normally Refresh, plus overflow only when genuinely needed.
 
-## 3. Parent-section routes inside the work area
+## 3. Center-title return to the source base panel
 
 | Application | Parent |
 | --- | --- |
@@ -68,7 +68,7 @@ Rules:
 | Keenetic Hero 4G+ | `/dashboard-infrastructure/overview` |
 | Stark SolarPower UPS | `/dashboard-infrastructure/overview` |
 
-Future applications may declare a parent route in machine-readable metadata, but its navigation control belongs inside the work area. The permanent Header rail never becomes Back.
+The centered two-line title is a `44px`+ semantic button with no arrow or separate `Назад` label. It captures the originating `Дом сейчас`, `Действия` or `Инфраструктура` route through the common `nikas.specialized.source_route.v1` hand-off, persists the accepted safe route and navigates explicitly through `history.pushState()` plus `location-changed`. `history.back()` is prohibited. The permanent left Header rail remains the Home Assistant menu.
 
 ## 4. Device Selector
 
@@ -244,8 +244,8 @@ reference/integration-panel-template/
 
 It provides:
 
-- `panel-shell-reference.js` — stable shell/reference component designed to be concatenated with the copied v1.6 zoom controller into one autonomous bundle;
-- `zoom-controller-reference.js` — the copy/adapt v1.6 gesture controller; concatenate it into the integration-owned production bundle;
+- `panel-shell-reference.js` — stable shell/reference component designed to be concatenated with the copied v1.7 zoom controller into one autonomous bundle;
+- `zoom-controller-reference.js` — the copy/adapt v1.7 gesture controller; concatenate it into the integration-owned production bundle;
 - `panel-contract.example.json` — machine-readable metadata example;
 - `README.md` — adoption checklist.
 

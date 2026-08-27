@@ -2,7 +2,7 @@
 
 This repository contains the default community health and engineering-standard files used across public repositories owned by `NikaSir`.
 
-The current required specialized-panel contract is `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.6. It includes the UPS-reference fixed Header plaques, native scrolling at 100%, overflow-axis pan only above 100%, stable-DOM anti-flicker rules, the opt-in two-level connection/freshness indicator, the 12–25px typography range, the 28px Bottom Tab Bar icon rule and mandatory integration brand assets.
+The current required specialized-panel contract is `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.7. It includes the UPS-reference fixed Header plaques, native scrolling at 100%, overflow-axis pan only above 100%, stable-DOM anti-flicker rules, the opt-in two-level connection/freshness indicator, the 12–25px typography range, the 28px Bottom Tab Bar icon rule and mandatory integration brand assets.
 
 ## Purpose
 
