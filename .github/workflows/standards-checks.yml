@@ -31,13 +31,17 @@ jobs:
           root = Path(".")
           standard = (root / "NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md").read_text(encoding="utf-8")
           shell = (root / "reference/integration-panel-template/panel-shell.js").read_text(encoding="utf-8")
+          readme = (root / "reference/integration-panel-template/README.md").read_text(encoding="utf-8")
           zoom = (root / "reference/integration-panel-template/zoom-controller-reference.js").read_text(encoding="utf-8")
           contract = json.loads((root / "reference/integration-panel-template/panel-contract.example.json").read_text(encoding="utf-8"))
 
-          for token in ("v1.7", "hass-toggle-menu", "12–25px", "Локально", "Данные актуальны", "GitHub Releases are not used"):
+          for token in ("v1.7", "hass-toggle-menu", "12–25px", "Локально", "Данные актуальны", "GitHub Releases are not used", "version-only `UI vX.Y.Z`", ":focus-visible"):
               assert token in standard, token
-          for token in ('icon="mdi:menu"', "font-size:23px", "font-size:14px", "--mdc-icon-size:28px", 'class="canvas-viewport"'):
+          for token in ('icon="mdi:menu"', "font-size:23px", "font-size:14px", "--mdc-icon-size:28px", 'class="canvas-viewport"', ".header-title:focus-visible", ".header-title:active", "subtitle: `UI v"):
               assert token in shell, token
+          assert 'subtitle: "Device model · UI v' not in shell
+          assert "second line is only `UI vX.Y.Z`" in readme
+          assert "<type/model> · UI" not in readme
           assert "mdi:arrow-left" not in shell
           assert shell.count('class="canvas-viewport"') == 1
           assert "const DEFAULT_MIN = 0.75" in zoom

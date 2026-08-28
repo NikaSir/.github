@@ -37,7 +37,8 @@ Rules:
 
 - left control is only `mdi:menu` and dispatches bubbling/composed `hass-toggle-menu`;
 - Back, browser history, an integration menu and device actions are prohibited in this rail;
-- center contains human title plus `<type/model> · UI vX.Y.Z`;
+- center is one clickable two-line title plaque: the first line is the human panel name and the second line is only `UI vX.Y.Z`;
+- the plaque returns to the validated originating NikaS base panel, has visible focus/pressed states and never uses browser Back;
 - title is `23px/800`, subtitle `14px/560`; narrow fallback is `21/13px`;
 - right side contains at most one global action, normally Refresh;
 - both actions use matching `44 × 44px`, radius `16px` plaques with `25px` `ha-icon` glyphs;
@@ -102,7 +103,7 @@ The two-level connection/freshness indicator is opt-in only. When requested, use
 
 1. Copy `zoom-controller-reference.js` and `panel-shell-reference.js` into the integration frontend source tree.
 2. Rename the custom element and constants for the integration.
-3. Set title, subtitle and UI version. Put any parent-section navigation inside the work area.
+3. Set the panel title and numeric `X.Y.Z` UI version. Put any parent-section navigation inside the work area.
 4. Define 3–5 primary tabs.
 5. Enable Device Selector only for multiple peer physical devices.
 6. Replace `_renderHeroStatus()` and `_renderViewContent()` with domain content.
