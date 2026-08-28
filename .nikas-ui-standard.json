@@ -1,0 +1,31 @@
+{
+  "version": "1.9",
+  "navigation_contract_version": "1.1",
+  "standard_path": "NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md",
+  "standard_sha256": "f02b40c0e16d49ced98f3f099382ede1798837e1d709cb8934787c110455fb9c",
+  "navigation_contract_path": "docs/NIKAS_PANEL_NAVIGATION_CONTRACT.md",
+  "navigation_contract_sha256": "c87dc760c0900701f6a807a35aba40e790f68f52c39f4579583598f697997e52",
+  "role": "specialized",
+  "artifact_kind": "reference",
+  "runtime_files": ["reference/integration-panel-template/panel-shell.js"],
+  "header_return": {
+    "button_marker": "id=\"return-source\"",
+    "version_marker": "`UI v${normalized}`",
+    "focus_marker": ".header-title:focus-visible",
+    "pressed_marker": ".header-title:active",
+    "explicit_precedence_marker": "safeReturnRoute(current.searchParams.get(\"return_to\")) || safeReturnRoute(current.searchParams.get(\"from\"))",
+    "capture_once_marker": "this._returnRoute = resolveReturnRoute(this)",
+    "timestamp_required_marker": "handedOffRaw !== null && handedOffAtRaw !== null",
+    "future_timestamp_rejection_marker": "age >= 0"
+  },
+  "title_plaque_reference": {
+    "implementation": "LIDER",
+    "min_width": "min(290px,100%)",
+    "min_height_px": 44,
+    "padding_px": "5 14",
+    "radius_px": 16,
+    "primary_background_mix_percent": 5,
+    "primary_border_mix_percent": 24,
+    "shadow": "0 5px 16px rgba(23,45,76,.06)"
+  }
+}

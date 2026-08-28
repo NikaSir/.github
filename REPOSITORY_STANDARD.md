@@ -51,15 +51,17 @@ Every maintained project repository should have:
 - `.gitignore`
 - `docs/RELEASES.md`
 
-Home Assistant repositories add HACS/Hassfest/release validation only when the real `custom_components/<domain>/` implementation is present.
+Home Assistant repositories add HACS, Hassfest and artifact validation only when the real `custom_components/<domain>/` implementation is present.
 
-## Releases
+## Publication
 
-- Tags are immutable once published.
-- A release is made from committed, reviewed source.
+- Automatic release tags are neither created nor required. Any existing historical tag remains immutable and is not an update channel.
+- NikaS panel and integration changes are delivered through committed, reviewed branches and pull requests.
+- GitHub Releases are not created for this workflow.
+- Built/versioned artifacts remain traceable to their source commit and are validated before merge.
 - Existing project version lineage is preserved during GitHub migration.
-- A migration/bootstrap commit is not itself a functional product release.
+- A migration/bootstrap commit is not itself a functional product publication.
 
 ## License
 
-A repository must receive an explicit license decision before its first public functional release. Do not infer or silently change a project's license from repository visibility alone.
+A repository must receive an explicit license decision before its first public functional publication. Do not infer or silently change a project's license from repository visibility alone.

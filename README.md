@@ -2,7 +2,7 @@
 
 This repository contains the default community health and engineering-standard files used across public repositories owned by `NikaSir`.
 
-The current required specialized-panel contract is `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.5. It includes the UPS-reference Header plaques, native scrolling at 100%, overflow-axis pan above 100%, the 28px Bottom Tab Bar icon rule and mandatory integration brand assets.
+The current required specialized-panel contract is `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.9 together with `docs/NIKAS_PANEL_NAVIGATION_CONTRACT.md`. It includes the exact LIDER center return plaque, deterministic source-route hand-off, UPS-reference fixed Header actions, native scrolling at 100%, overflow-axis pan only above 100%, stable-DOM anti-flicker rules, the opt-in two-level connection/freshness indicator, the 12–25px typography range, the 28px Bottom Tab Bar icon rule and mandatory integration brand assets.
 
 ## Purpose
 
@@ -17,7 +17,7 @@ The goal is to keep contribution, support, security, issue, pull-request, reposi
 - `GOVERNANCE.md` — decision-making model.
 - `PULL_REQUEST_TEMPLATE.md` — pull-request checklist.
 - `.github/ISSUE_TEMPLATE/` — structured bug and feature request forms.
-- `REPOSITORY_STANDARD.md` — common repository structure and release expectations.
+- `REPOSITORY_STANDARD.md` — common repository structure and publication expectations.
 - `SPECIALIZED_PANEL_UI_STANDARD.md` — mandatory mobile-first navigation/application-shell contract for integration-owned Home Assistant panels.
 - `NIKAS_INTEGRATION_PANEL_TEMPLATE.md` — mandatory common shell, visual primitives, geometry and information-presentation template for specialized panels.
 - `SPECIALIZED_PANEL_FRONTEND_RELEASE_STANDARD.md` — mandatory self-contained production-bundle and cold-load reliability contract for specialized Home Assistant panels.
@@ -32,7 +32,7 @@ A project repository may provide its own file or issue-template directory when i
 1. Reproducible changes over manual edits.
 2. Small, reviewable commits and pull requests.
 3. No credentials, tokens, private keys, device secrets, or personal data in source control.
-4. Releases are traceable to source commits and versioned artifacts.
+4. Published artifacts are traceable to reviewed source commits; NikaS panel work uses branches, pull requests and `main`, not GitHub Releases or automatic release tags.
 5. Automation must fail visibly rather than silently accepting invalid state.
 6. Integration-owned Home Assistant panels use the shared NikaS specialized-panel application shell and `NikaS Integration Panel Template` unless explicitly exempted by architecture decision.
 7. Every specialized production panel loads from one self-contained project-owned JavaScript bundle; previous UI versions are never runtime dependencies.

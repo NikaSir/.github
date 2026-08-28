@@ -1,478 +1,292 @@
-# NikaS Integration Panel Template v1.0
+# NikaS Integration Panel Template v1.9
 
-> **SUPERSEDED FOR SHELL/ZOOM/NAVIGATION:** `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.5 is normative. Preserve compatible domain composition only.
+> **SUPERSEDED FOR SHELL GEOMETRY, HEADER NAVIGATION AND GESTURES:** use `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.9 and `NIKAS_PANEL_NAVIGATION_CONTRACT.md`. Domain composition guidance remains valid only when compatible with those documents.
 
-Status: **mandatory for all specialized integration-owned panels**  
-Primary target: **iPhone Pro Max · portrait · one-handed use**  
-Revision: **2026-08-22**
+**Status:** Required reference implementation
+**Primary target:** iPhone Pro Max, portrait
+**Applies to:** all integration-owned specialized panels in Home Assistant NikaS
 
-## 1. Purpose and scope
+This document turns the existing UI and frontend-release standards into one reusable implementation template. Domain developers customize content, not the application shell.
 
-This template defines the shared application shell and visual primitives for all specialized Home Assistant panels in the NikaS ecosystem, including Stark SolarPower, HO-SC-8W, S8 OMNI, Keenetic Hero 4G+, VLESS Gateway and future integration-owned panels.
+Normative sources:
 
-The user must experience these panels as subsystems of one application, not as unrelated custom frontends.
+- `INTEGRATION_DASHBOARD_UI_STANDARD.md` — navigation, device context, mobile behavior and semantics;
+- `SPECIALIZED_PANEL_FRONTEND_RELEASE_STANDARD.md` — production frontend delivery;
+- this document — shared geometry, visual primitives and reference implementation contract.
 
-A developer of a new specialized panel chooses domain content, device context, tabs, telemetry, actions and diagrams. The shell itself is not redesigned per integration.
+## 1. Fixed application hierarchy
 
-## 2. Canonical panel structure
-
-Every primary view follows this order:
+Every specialized panel uses this order:
 
 ```text
-┌─────────────────────────────────────────────┐
-│ ←              PANEL TITLE            ↻ / ⋮ │
-│                subtitle · UI vX.Y.Z         │
-├─────────────────────────────────────────────┤
-│   DeviceContextSelector (optional)          │
-│                                             │
-│   HeroStatus                                │
-│                                             │
-│   ViewContent                               │
-│                                             │
-├─────────────────────────────────────────────┤
-│ Tab 1       Tab 2       ...       Diagnostics│
-└─────────────────────────────────────────────┘
+AppHeader
+↓
+DeviceContextSelector (optional, peer devices only)
+↓
+One scroll/zoom viewport with HeroStatus + ViewContent
+↓
+BottomTabBar
 ```
 
-Order is stable across integrations.
+The hierarchy must not change between integrations.
 
-## 3. Header
+- Header menu answers **how do I open Home Assistant navigation?**
+- Device Selector answers **which physical device?**
+- Bottom Tab Bar answers **which section of this application?**
 
-The Header uses a symmetric grid:
+## 2. Header contract
+
+Mobile grid:
 
 ```text
 52px | minmax(0, 1fr) | 52px
 ```
 
-On narrow mobile layouts it may use:
+Narrow fallback:
 
 ```text
 48px | minmax(0, 1fr) | 48px
 ```
 
-### Left slot
+Rules:
 
-The left slot always contains an icon-only Back control:
+- left control is only `mdi:menu`; it dispatches bubbling/composed `hass-toggle-menu`;
+- menu and Refresh use matching 44×44 px, radius 16 px plaques with 25 px `ha-icon` glyphs;
+- title is geometrically centered on the viewport;
+- first line is the human application name;
+- second line contains only `UI vX.Y.Z`; type, model and context text are prohibited there;
+- the whole title is the sole standard return button and copies the exact LIDER plaque geometry, surface, pressed and focus-visible states from the v1.9 standard;
+- first/second lines are `23/14px`; narrow fallback is `21/13px`;
+- decorative brand/device icon is not placed next to the title;
+- right zone contains at most one primary global action, normally Refresh, plus overflow only when genuinely needed.
 
-```text
-←
-```
+## 3. Parent-section routes inside the work area
 
-Requirements:
+| Application | Parent |
+| --- | --- |
+| ZONT | `/dashboard-house-v11/home` |
+| StarLine | `/dashboard-house-v11/home` |
+| HO-SC-8W irrigation | `/dashboard-actions/home` |
+| S8 OMNI | `/dashboard-actions/home` |
+| Keenetic Hero 4G+ | `/dashboard-infrastructure/overview` |
+| Stark SolarPower UPS | `/dashboard-infrastructure/overview` |
+| LIDER | `/dashboard-infrastructure/overview` |
 
-- minimum touch target: 44 × 44 px;
-- icon: `mdi:arrow-left` or the Home Assistant-equivalent arrow glyph;
-- no visible `Назад` text in the standardized Header;
-- Back uses explicit Home Assistant navigation to the declared `parent_path`;
-- browser history is not the navigation contract;
-- hold and double tap do not execute device actions.
+Future applications may declare a parent route in machine-readable metadata, but its navigation control belongs inside the work area. The permanent Header rail never becomes Back.
 
-Canonical parent paths remain defined by the specialized-panel UI standard.
+## 4. Device Selector
 
-### Center slot
+Use only when one application owns several peer physical devices of the same type.
 
-The title is geometrically centered relative to the viewport.
-
-First line: human-readable subsystem name.
-
-Second line:
-
-```text
-<type / model> · UI vX.Y.Z
-```
-
-Examples:
-
-```text
-Stark SolarPower
-UPS · UI v0.3.3
-```
+Reference form:
 
 ```text
-Полив
-HO-SC-8W · UI v0.4.4
+[ ● UPS Интернет ] [ ● UPS Котёл ]
 ```
 
-```text
-Keenetic Hero 4G+
-Network Control Center · UI v0.3.0
-```
+Rules:
 
-Do not repeat the same large title immediately below the Header.
-
-### Right slot
-
-The right slot has the same geometry as the left slot.
-
-At most one primary global action is shown:
-
-- Refresh (`mdi:refresh`) when a real integration-owned refresh action exists;
-- More (`mdi:dots-vertical`) when a global panel menu is justified;
-- otherwise an empty symmetric slot is retained.
-
-Header controls never execute domain device actions unless the action is explicitly defined as a panel-global action.
-
-## 4. Device context selector
-
-Use a DeviceContextSelector only when one panel represents multiple peer physical devices.
-
-It appears directly below the Header and above the HeroStatus.
-
-Requirements:
-
-- device order is stable;
-- selection changes panel content, not button order;
-- selection persists while moving between main tabs;
-- active device uses primary border/surface/text;
-- a small semantic status dot may be shown: green normal, yellow attention, red error, gray unreliable/no data;
-- the selector is not a primary navigation tab.
-
-Do not use it for channels/zones of one controller.
+- immediately below Header on every primary view;
+- fixed device order;
+- selection changes only active presentation and content;
+- selected device is never moved to first position;
+- selection persists while switching Bottom Tab Bar sections;
+- status dot semantics: green healthy, amber warning, red fault, grey unreliable/unknown;
+- all full content below belongs to the selected device only.
 
 ## 5. HeroStatus
 
 The first content card answers:
 
-> **What is happening with the system right now?**
+> What is happening now, and is the system healthy?
 
 HeroStatus contains:
 
 1. one large factual status;
-2. one short explanation;
-3. optionally one compact badge.
+2. one concise explanation;
+3. optionally one compact badge;
+4. only the minimum domain telemetry needed to understand current state.
 
-Examples:
+Do not turn the Hero into a technical sensor registry.
 
-```text
-✓ Нормально
-UPS работает от сети
-```
+## 6. Shared color semantics
 
-```text
-✓ Полив не идёт
-Контроллер готов
-```
-
-```text
-● Онлайн
-Интернет доступен
-```
-
-```text
-! Состояние неизвестно
-Нет достоверной телеметрии
-```
-
-Technical diagnostic detail does not belong in the Hero.
-
-## 6. Semantic colors
-
-Color is semantic, not decorative.
-
-| Meaning | Color role |
+| Meaning | Presentation |
 | --- | --- |
-| normal / available / working | green |
-| selected / informational / active | primary / blue |
-| warning / attention | orange |
-| error / unavailable | red |
-| unknown / unreliable / no data | gray |
+| healthy / available / working | green |
+| selection / information / active context | Home Assistant primary color |
+| warning | amber/orange |
+| fault / unavailable source | red |
+| unknown / unreliable data | grey |
 
-Do not assign colors merely to distinguish subsystems.
+Color must communicate state, not decorate different subsystems.
 
-## 7. Shared card geometry
+## 7. Shared visual primitives
 
-Primary cards use the same baseline geometry:
+### Card
 
-```text
-border-radius: 20–24px
-padding: 16–20px
-vertical/card gap: 12–16px
-border: 1px divider-color
-shadow: none or minimal
-```
-
-Hierarchy comes from typography, spacing, state and grouping rather than heavy shadow effects.
-
-## 8. MetricCard
-
-Key numeric metrics use a consistent form:
-
-```text
-Input
-224,6 V
-```
-
-```text
-Load
-13 %
-```
-
-Rules:
-
-- metric label uses secondary text;
-- value uses primary semi-bold/bold text;
-- unit is always shown when the metric has one;
-- locale-appropriate formatting is preferred.
-
-Do not show unitless values when a physical unit exists.
-
-## 9. Shared content primitives
-
-Specialized panels build ViewContent from the same visual primitives:
-
-### StatusCard
-
-```text
-Name                         Normal
-secondary text
-```
+- radius: 20–24 px;
+- padding: 16–20 px;
+- gap between cards: 12–16 px;
+- 1 px divider/border;
+- minimal or no shadow.
 
 ### MetricCard
 
 ```text
-Metric
-123 unit
+Label
+Value unit
 ```
+
+Label is secondary text. Value is primary, semibold/bold. Unit is always present when the HA entity provides one.
 
 ### StateRow
 
 ```text
-Icon   Name                    Value >
+Icon   Label                         Value
 ```
 
 ### ActionCard
 
 ```text
 Icon   Action
-       short explanation
+       concise explanation
 ```
 
 ### AlertCard
 
 ```text
 ! Problem
-  short explanation
+  concise explanation
 ```
 
 ### Diagram
 
-Use a diagram only when topology or data flow materially improves understanding.
+Allowed only when topology/flow materially improves understanding.
 
-## 10. Primary content width
+## 8. Typography baseline
 
-Mobile uses the full available width with system side gutters.
+Primary mobile screen must remain readable at arm/hand distance.
 
-Desktop/tablet uses a centered working area:
+Meaningful user-facing typography stays within `12–25px`. Header is the explicit `23/14px` pair (`21/13px` narrow); the optional connection/freshness indicator uses `16/13px`; Bottom Tab Bar labels use `12px/700`. Only redundant non-interactive schematic annotations may use `9–10px`. If meaningful copy does not fit at 12px, recompose the layout instead of shrinking it.
 
-```text
-max-width: 1200–1280px
-margin: 0 auto
-```
+## 9. Bottom Tab Bar
 
-Do not stretch useful content across very wide desktop canvases.
-
-## 11. BottomTabBar
-
-BottomTabBar is the primary internal navigation mechanism.
-
-It is always:
+Primary navigation is always:
 
 - fixed;
-- edge-attached to the viewport bottom;
-- full-width;
-- iOS Safe Area aware;
-- non-floating;
-- available during vertical scroll;
-- backed by enough content bottom clearance that the last card can scroll fully above it.
+- edge-attached;
+- full-width on the mobile viewport;
+- safe-area aware;
+- outside the content scroll region;
+- 3–5 primary destinations;
+- icon + short label;
+- `ha-icon` MDI glyph at 28 px and label at 12 px/700;
+- active state highlighted inside its shared cell.
 
-Floating pill navigation is prohibited.
+Floating/pill navigation with side or bottom gaps is non-conforming.
 
-## 12. Tab count and labels
+## 10. Loading contract
 
-Target 3–5 main tabs; maximum 5.
-
-Each tab has:
-
-- an icon;
-- a short label;
-- a minimum 44 px touch target.
-
-Preferred vocabulary:
-
-```text
-Обзор
-Управление
-WAN/LTE
-Станция
-Сервис
-История
-Настройки
-Диагностика
-```
-
-`Диагн.` is allowed only where the full word physically does not fit the mobile tab bar.
-
-The first tab is always `Обзор`. When technical telemetry exists, the final main tab is `Диагностика` or the justified narrow form `Диагн.`.
-
-## 13. Active tab
-
-The active tab is highlighted inside the shared BottomTabBar by:
-
-- primary icon;
-- primary label;
-- light primary surface inside its own cell.
-
-It must not appear as a separate floating card.
-
-## 14. Overview contract
-
-Overview answers, as early as possible:
-
-- is the subsystem working;
-- what is happening now;
-- what are the key operating metrics;
-- is there a problem requiring attention.
-
-Technical diagnostics remain out of Overview unless they directly affect operational truth.
-
-## 15. Diagnostics contract
-
-Diagnostics contains integration health, transport, caches, freshness, raw/technical state, unsupported or laboratory details, and verification screens.
-
-It must not overload Overview.
-
-`unknown` / `unavailable` are never mapped to healthy/off/zero. Use explicit unreliable wording such as `Нет данных`, `Состояние неизвестно`, or `Нет достоверной телеметрии`.
-
-## 16. Loading state
-
-Loading keeps the application shell visible:
+Loading must preserve the application shell:
 
 ```text
 Header
 ↓
+Device Selector placeholder if applicable
+↓
 Skeleton / Loading state
 ↓
-BottomTabBar
+Bottom Tab Bar
 ```
 
-A blank white page is not an acceptable loading state.
+A blank white application while waiting for bootstrap/telemetry is non-conforming.
 
-## 17. Long press
+The shell is mounted once. Telemetry, clock and freshness updates point-patch existing text/classes/attributes and never replace Header, selector, viewport, canvas, background or Bottom Tab Bar. Tabs and peer-device views use lazy DOM caching so switching them cannot create a full-screen flash.
 
-Where a visual control is backed by a factual Home Assistant entity:
+## 11. unavailable / unknown
+
+`unknown` and `unavailable` are never rendered as normal/green/zero by default.
+
+Use explicit semantics such as:
+
+- `Нет данных`;
+- `Состояние неизвестно`;
+- `Нет достоверной телеметрии`.
+
+A domain may distinguish source-down from stale data, but neither is healthy.
+
+## 12. Long press
+
+Factual entity-backed content should preserve:
 
 ```text
-hold → standard Home Assistant more-info
+hold → native Home Assistant more-info
 ```
 
-Header, DeviceContextSelector and BottomTabBar are navigation/shell controls and do not trigger entity-specific actions.
+Header, Device Selector and Bottom Tab Bar are navigation chrome and never execute entity-specific commands on hold/double tap.
 
-## 18. Refresh
+## 13. Production frontend rule
 
-If the integration provides a genuine forced refresh, expose one refresh action in the Header.
+The copied reference implementation is a development source pattern, not a shared runtime library.
 
-Do not duplicate Refresh inside content without a domain-specific reason.
-
-## 19. Mobile-first and responsive behavior
-
-Primary acceptance viewport:
+Every integration produces its own autonomous production artifact:
 
 ```text
-iPhone Pro Max · portrait
+<integration-panel-bundle.js>?v=<ui-version>
 ```
 
-Mobile uses one primary column. Tablet/desktop may use two columns or a domain-specific composition, but the information hierarchy stays the same.
+No specialized panel may import this repository or another integration at runtime. Historical versions and shared source helpers may participate only at build time.
 
-Desktop is an adaptation of the mobile application, not a separately designed dashboard.
+## 14. Reference implementation
 
-## 20. Home Assistant sidebar
-
-The Home Assistant sidebar is outside the specialized-panel shell. The panel uses the remaining viewport and does not visually imitate or recreate the sidebar.
-
-## 21. Production frontend rule
-
-The separate `SPECIALIZED_PANEL_FRONTEND_RELEASE_STANDARD.md` is mandatory.
-
-The production rule is:
-
-> **Specialized Panel = self-contained production frontend bundle.**
-
-The shared template/reference implementation is a development-time reference or vendored source. It must never become a shared runtime dependency between integrations.
-
-Each integration ships its own autonomous production bundle.
-
-## 22. Logical implementation template
-
-Every implementation should map to these concepts:
+The code template lives under:
 
 ```text
-PanelShell
-│
-├── AppHeader
-│   ├── BackButton
-│   ├── Title
-│   ├── Subtitle / UI version
-│   └── HeaderAction
-│
-├── DeviceContextSelector (optional)
-│
-├── HeroStatus
-│
-├── ViewContent
-│   ├── StatusCard
-│   ├── MetricCard
-│   ├── StateRow
-│   ├── ActionCard
-│   ├── AlertCard
-│   └── Diagram
-│
-└── BottomTabBar
+templates/integration-panel-v1/
 ```
 
-Developers reuse this shell and primitives rather than designing new shell geometry.
+It provides:
 
-## 23. Existing-panel alignment
+- `panel-shell-reference.js` — stable shell/reference component designed to be concatenated with the copied v1.9 zoom controller into one autonomous bundle;
+- `zoom-controller-reference.js` — the copy/adapt v1.9 gesture controller; concatenate it into the integration-owned production bundle;
+- `panel-contract.example.json` — machine-readable metadata example;
+- `README.md` — adoption checklist.
 
-### Stark SolarPower
+The reference intentionally contains no integration API calls and no device commands. A developer copies/adapts it into the integration repository, replaces placeholders and domain ViewContent, then ships an autonomous production bundle.
 
-Preserve UPS selector, Hero and `Сеть → UPS → Нагрузка` subject model. Align Header geometry and full-width BottomTabBar.
+## 15. What each integration is allowed to customize
 
-### HO-SC-8W
+Only these application-specific choices belong to the integration:
 
-Preserve compact operational status, next watering and zone workflow. Standardize icon-only Back, symmetric Header slots and shared BottomTabBar style.
+1. title and numeric UI version; the rendered second line remains exactly `UI vX.Y.Z`;
+2. optional parent route shown only through an in-work navigation control;
+3. optional peer-device selector;
+4. HeroStatus content;
+5. primary tab set (3–5);
+6. domain ViewContent;
+7. validated actions exposed through the integration API/entities;
+8. domain-specific diagrams.
 
-### S8 OMNI
+The integration should not redesign Header geometry, navigation mechanics, state-color semantics, basic card language, mobile safe-area behavior or production loading architecture.
 
-Preserve composite robot/station status and major cleaning actions. Align Header, status badges and BottomTabBar to the shared shell.
+## 16. Acceptance
 
-### Keenetic Hero 4G+
+A specialized panel is template-conforming when, on iPhone Pro Max portrait:
 
-Preserve WAN diagram and Ethernet/LTE subject model. Align Header, Hero, card radii/spacing and BottomTabBar.
+- Header geometry matches the common shell;
+- `mdi:menu` opens the native Home Assistant menu and both Header actions use matching plaques;
+- optional Device Selector remains stable across primary sections;
+- first visible content is current domain status rather than another navigation row;
+- Bottom Tab Bar is fixed, edge-attached and safe-area aware;
+- last content scrolls fully above the Tab Bar;
+- native vertical scroll at 100%, focal 75–200% pinch, bounded enlarged pan, 97–103% snap and stationary two-finger reset work;
+- no horizontal scrolling occurs;
+- no important label is clipped into ambiguity;
+- unknown/unavailable is visibly non-normal;
+- factual entity long press opens native more-info where supported;
+- cold-cache loading shows shell rather than a blank page;
+- telemetry, scroll and tab/device switches produce no whole-panel flash or DOM duplication;
+- production frontend is one self-contained bundle.
 
-### VLESS Gateway
-
-Adopt the template from the first public specialized-panel release.
-
-## 24. Developer-owned variability
-
-A specialized-panel developer chooses only:
-
-1. panel title and subtitle/model;
-2. declared `parent_path`;
-3. whether a DeviceContextSelector is needed;
-4. HeroStatus semantics;
-5. ViewContent for each tab;
-6. tab set within the 3–5 rule;
-7. domain-specific diagrams and actions.
-
-Header geometry, Back behavior, shared typography, card geometry, state semantics, BottomTabBar behavior, loading shell, long-press convention and production-bundle rules are common project infrastructure.
-
-## 25. Acceptance effect
-
-When moving through:
-
-```text
-UPS → Полив → S8 OMNI → Keenetic → VLESS
-```
-
-users should perceive one NikaS application ecosystem with different subsystems, not a collection of unrelated custom frontend applications.
+The intended result is one NikaS application ecosystem with different domain content, not a collection of unrelated frontend designs.
