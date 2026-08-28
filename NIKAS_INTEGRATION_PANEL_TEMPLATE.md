@@ -1,6 +1,6 @@
-# NikaS Integration Panel Template v1.7
+# NikaS Integration Panel Template v1.8
 
-> **SUPERSEDED FOR SHELL GEOMETRY AND GESTURES:** use `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.7. Domain composition guidance remains valid only when compatible with v1.7.
+> **SUPERSEDED FOR SHELL GEOMETRY, HEADER NAVIGATION AND GESTURES:** use `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.8 and `NIKAS_PANEL_NAVIGATION_CONTRACT.md`. Domain composition guidance remains valid only when compatible with those documents.
 
 **Status:** Required reference implementation
 **Primary target:** iPhone Pro Max, portrait
@@ -10,9 +10,9 @@ This document turns the existing UI and frontend-release standards into one reus
 
 Normative sources:
 
-- `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` — sole Header, gesture, rendering, typography, indicator, navigation and brand authority;
+- `INTEGRATION_DASHBOARD_UI_STANDARD.md` — navigation, device context, mobile behavior and semantics;
 - `SPECIALIZED_PANEL_FRONTEND_RELEASE_STANDARD.md` — production frontend delivery;
-- this document — compatible visual primitives and copy/adapt reference implementation.
+- this document — shared geometry, visual primitives and reference implementation contract.
 
 ## 1. Fixed application hierarchy
 
@@ -54,21 +54,25 @@ Rules:
 - menu and Refresh use matching 44×44 px, radius 16 px plaques with 25 px `ha-icon` glyphs;
 - title is geometrically centered on the viewport;
 - first line is the human application name;
-- second line is exactly `UI vX.Y.Z`;
+- second line contains only `UI vX.Y.Z`; type, model and context text are prohibited there;
+- the whole title is the sole standard return button and copies the exact LIDER plaque geometry, surface, pressed and focus-visible states from the v1.8 standard;
 - first/second lines are `23/14px`; narrow fallback is `21/13px`;
 - decorative brand/device icon is not placed next to the title;
 - right zone contains at most one primary global action, normally Refresh, plus overflow only when genuinely needed.
 
-## 3. Center-title return to the source base panel
+## 3. Parent-section routes inside the work area
 
 | Application | Parent |
 | --- | --- |
-| HO-SC-8W irrigation | `/dashboard-actions` |
-| S8 OMNI | `/dashboard-actions` |
+| ZONT | `/dashboard-house-v11/home` |
+| StarLine | `/dashboard-house-v11/home` |
+| HO-SC-8W irrigation | `/dashboard-actions/home` |
+| S8 OMNI | `/dashboard-actions/home` |
 | Keenetic Hero 4G+ | `/dashboard-infrastructure/overview` |
 | Stark SolarPower UPS | `/dashboard-infrastructure/overview` |
+| LIDER | `/dashboard-infrastructure/overview` |
 
-The centered two-line title is a `44px`+ semantic button with no arrow or separate `Назад` label. It captures the originating `Дом сейчас`, `Действия` or `Инфраструктура` route through the common `nikas.specialized.source_route.v1` hand-off, persists the accepted safe route and navigates explicitly through `history.pushState()` plus `location-changed`. `history.back()` is prohibited. The permanent left Header rail remains the Home Assistant menu.
+Future applications may declare a parent route in machine-readable metadata, but its navigation control belongs inside the work area. The permanent Header rail never becomes Back.
 
 ## 4. Device Selector
 
@@ -239,13 +243,13 @@ No specialized panel may import this repository or another integration at runtim
 The code template lives under:
 
 ```text
-reference/integration-panel-template/
+templates/integration-panel-v1/
 ```
 
 It provides:
 
-- `panel-shell-reference.js` — stable shell/reference component designed to be concatenated with the copied v1.7 zoom controller into one autonomous bundle;
-- `zoom-controller-reference.js` — the copy/adapt v1.7 gesture controller; concatenate it into the integration-owned production bundle;
+- `panel-shell-reference.js` — stable shell/reference component designed to be concatenated with the copied v1.8 zoom controller into one autonomous bundle;
+- `zoom-controller-reference.js` — the copy/adapt v1.8 gesture controller; concatenate it into the integration-owned production bundle;
 - `panel-contract.example.json` — machine-readable metadata example;
 - `README.md` — adoption checklist.
 
@@ -255,7 +259,7 @@ The reference intentionally contains no integration API calls and no device comm
 
 Only these application-specific choices belong to the integration:
 
-1. title and subtitle;
+1. title and numeric UI version; the rendered second line remains exactly `UI vX.Y.Z`;
 2. optional parent route shown only through an in-work navigation control;
 3. optional peer-device selector;
 4. HeroStatus content;
