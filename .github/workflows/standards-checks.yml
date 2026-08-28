@@ -20,9 +20,9 @@ jobs:
         run: |
           node --check reference/integration-panel-template/zoom-controller-reference.js
           node --check reference/integration-panel-template/panel-shell.js
-      - name: Enforce NikaS UI standard v1.8
+      - name: Enforce NikaS UI standard v1.9
         run: python scripts/check_nikas_ui_standard.py
-      - name: Validate v1.8 contract
+      - name: Validate v1.9 contract
         run: |
           python - <<'PY'
           import json
@@ -36,7 +36,7 @@ jobs:
           navigation = (root / "docs/NIKAS_PANEL_NAVIGATION_CONTRACT.md").read_text(encoding="utf-8")
           contract = json.loads((root / "reference/integration-panel-template/panel-contract.example.json").read_text(encoding="utf-8"))
 
-          for token in ("v1.8", "hass-toggle-menu", "12–25px", "Локально", "Данные актуальны", "GitHub Releases are not used", "exact form `UI vX.Y.Z`", "Focus-visible", "same click/keyboard handler"):
+          for token in ("v1.9", "hass-toggle-menu", "12–25px", "Локально", "Данные актуальны", "GitHub Releases are not used", "exact form `UI vX.Y.Z`", "Focus-visible", "same click/keyboard handler"):
               assert token in standard, token
           for token in ('icon="mdi:menu"', "font-size:23px", "font-size:14px", "--mdc-icon-size:28px", 'class="canvas-viewport"', ".header-title:focus-visible", ".header-title:active", 'uiVersion: "1.0.0"', "uiVersionLine", "nikas.specialized.source_route_at.v1"):
               assert token in shell, token
