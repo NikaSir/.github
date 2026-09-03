@@ -89,5 +89,6 @@
     "selection_is_independent": true,
     "update_mode": "point-patch",
     "accessible_status_required": true
-  }
+  },
+  "frontend_delivery_path": "SPECIALIZED_PANEL_FRONTEND_RELEASE_STANDARD.md"
 }
