@@ -1,7 +1,6 @@
-// NikaS Integration Panel Template v1.9
-// Canonical copy/adapt reference implementation.
-// Production rule: copy/adapt into the integration repository and build one
-// self-contained integration-owned frontend bundle. Never import this at runtime.
+// ARCHIVED pre-Shell-v2 implementation — DO NOT COPY OR LOAD.
+// Retained only for source-history review.
+// Vendor the NikaS Shell v2.2 source kit from NikaSir/ha-contract-generated-ui.
 
 const APP = {
   title: "Example Panel",
@@ -402,7 +401,7 @@ class NikaSIntegrationPanelReference extends HTMLElement {
     commitStableMarkup(this.shadowRoot.querySelector(".bottom-slot"), this._renderTabBar());
     this._attachEntityInteractions();
 
-    // Production bundles concatenate the v1.9 zoom controller before this
+    // Production bundles concatenate the legacy generation 1.9 zoom controller before this
     // component. No repository or network runtime import is allowed.
     window.NikasPanelZoom?.attach?.(this, { min: 0.75, max: 2.0 })?.bind?.();
   }

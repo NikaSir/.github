@@ -13,58 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-python@v5
         with:
-          node-version: "22"
-      - name: Validate copy/adapt JavaScript
-        run: |
-          node --check reference/integration-panel-template/zoom-controller-reference.js
-          node --check reference/integration-panel-template/panel-shell.js
-      - name: Enforce NikaS UI standard v1.9
+          python-version: "3.13"
+      - name: Enforce synchronized NikaS UI v2.2 mirror
         run: python scripts/check_nikas_ui_standard.py
-      - name: Validate v1.9 contract
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-
-          root = Path(".")
-          standard = (root / "NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md").read_text(encoding="utf-8")
-          shell = (root / "reference/integration-panel-template/panel-shell.js").read_text(encoding="utf-8")
-          readme = (root / "reference/integration-panel-template/README.md").read_text(encoding="utf-8")
-          zoom = (root / "reference/integration-panel-template/zoom-controller-reference.js").read_text(encoding="utf-8")
-          navigation = (root / "docs/NIKAS_PANEL_NAVIGATION_CONTRACT.md").read_text(encoding="utf-8")
-          contract = json.loads((root / "reference/integration-panel-template/panel-contract.example.json").read_text(encoding="utf-8"))
-
-          for token in ("v1.9", "hass-toggle-menu", "12–25px", "Локально", "Данные актуальны", "GitHub Releases are not used", "exact form `UI vX.Y.Z`", "Focus-visible", "same click/keyboard handler"):
-              assert token in standard, token
-          for token in ('icon="mdi:menu"', "font-size:23px", "font-size:14px", "--mdc-icon-size:28px", 'class="canvas-viewport"', ".header-title:focus-visible", ".header-title:active", 'uiVersion: "1.0.0"', "uiVersionLine", "nikas.specialized.source_route_at.v1"):
-              assert token in shell, token
-          assert 'subtitle: "Device model · UI v' not in shell
-          assert "history.back(" not in shell
-          assert "second line is only `UI vX.Y.Z`" in readme
-          assert "<type/model> · UI" not in readme
-          assert "mdi:arrow-left" not in shell
-          assert shell.count('class="canvas-viewport"') == 1
-          assert "const DEFAULT_MIN = 0.75" in zoom
-          assert "const DEFAULT_MAX = 2.0" in zoom
-          assert "this.host?._selectedDeviceId || this.host?._selectedDevice" in zoom
-          assert contract["header"]["left_event"] == "hass-toggle-menu"
-          assert contract["header"]["title_action"] == "return_to_source_base_panel"
-          assert contract["header"]["browser_history_back_allowed"] is False
-          assert contract["header"]["title_second_line"] == "UI vX.Y.Z"
-          assert contract["header"]["title_plaque"]["reference"] == "LIDER"
-          assert contract["header"]["title_plaque"]["pressed_background_primary_mix_percent"] == 13
-          assert contract["header"]["title_plaque"]["pressed_border_primary_mix_percent"] == 42
-          assert contract["header"]["source_route_timestamp_key"] == "nikas.specialized.source_route_at.v1"
-          assert contract["header"]["allowed_source_routes"] == [
-              "/dashboard-house-v11/home",
-              "/dashboard-actions/home",
-              "/dashboard-infrastructure/overview",
-          ]
-          assert contract["zoom"]["range_percent"] == [75, 200]
-          assert contract["rendering"]["routine_shadow_root_replacement"] is False
-          assert contract["connection_indicator"]["enabled"] is False
-          for token in ("/starline", "nikas.specialized.source_route_at.v1", "same click/keyboard handler", "blocking defect"):
-              assert token in navigation, token
-          PY

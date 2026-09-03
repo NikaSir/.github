@@ -2,6 +2,6 @@
 
 This filename is retained for existing repository links only.
 
-The sole current authority is [`NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md`](NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md), version 1.9, together with its required [navigation contract](docs/NIKAS_PANEL_NAVIGATION_CONTRACT.md). It replaces every earlier rule for Header navigation, Back, safe areas, zoom, scrolling, panning, rendering, typography, connection/freshness indicators, Bottom Tab Bar geometry and repository/integration icons.
+The sole current authority is [`NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md`](NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md), version 2.2, together with its required [navigation contract](docs/NIKAS_PANEL_NAVIGATION_CONTRACT.md) v1.2. The authoritative owner is [`NikaSir/ha-contract-generated-ui`](https://github.com/NikaSir/ha-contract-generated-ui).
 
-Implementations must not combine historical rules with v1.9. In particular, the permanent left Header action is the Home Assistant system menu, the exact LIDER center plaque is the sole return control, and GitHub Releases and automatic release tags are not part of the NikaS panel publication workflow.
+Implementations must not combine historical rules with v2.2. The permanent left Header action is the Home Assistant system menu, the centered title plaque is the sole return control, Bottom Tab Bar icons are 26px, and GitHub Releases or automatic release tags are not part of the NikaS panel publication workflow.
