@@ -1,6 +1,6 @@
-# NikaS Integration Panel Template v1.9
+# NikaS Integration Panel Template v2.2
 
-> **SUPERSEDED FOR SHELL GEOMETRY, HEADER NAVIGATION AND GESTURES:** use `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v1.9 and `NIKAS_PANEL_NAVIGATION_CONTRACT.md`. Domain composition guidance remains valid only when compatible with those documents.
+> **SUPERSEDED FOR SHELL GEOMETRY, HEADER NAVIGATION AND GESTURES:** use `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v2.2 and `NIKAS_PANEL_NAVIGATION_CONTRACT.md`. Domain composition guidance remains valid only when compatible with those documents.
 
 **Status:** Required reference implementation
 **Primary target:** iPhone Pro Max, portrait
@@ -55,7 +55,7 @@ Rules:
 - title is geometrically centered on the viewport;
 - first line is the human application name;
 - second line contains only `UI vX.Y.Z`; type, model and context text are prohibited there;
-- the whole title is the sole standard return button and copies the exact LIDER plaque geometry, surface, pressed and focus-visible states from the v1.9 standard;
+- the whole title is the sole standard return button and copies the exact LIDER plaque geometry, surface, pressed and focus-visible states from the v2.2 standard;
 - first/second lines are `23/14px`; narrow fallback is `21/13px`;
 - decorative brand/device icon is not placed next to the title;
 - right zone contains at most one primary global action, normally Refresh, plus overflow only when genuinely needed.
@@ -64,8 +64,9 @@ Rules:
 
 | Application | Parent |
 | --- | --- |
-| ZONT | `/dashboard-house-v11/home` |
-| StarLine | `/dashboard-house-v11/home` |
+| Access | `/dashboard-house-v13/home` |
+| ZONT | `/dashboard-house-v13/home` |
+| StarLine | `/dashboard-house-v13/home` |
 | HO-SC-8W irrigation | `/dashboard-actions/home` |
 | S8 OMNI | `/dashboard-actions/home` |
 | Keenetic Hero 4G+ | `/dashboard-infrastructure/overview` |
@@ -181,7 +182,7 @@ Primary navigation is always:
 - outside the content scroll region;
 - 3–5 primary destinations;
 - icon + short label;
-- `ha-icon` MDI glyph at 28 px and label at 12 px/700;
+- `ha-icon` MDI glyph at 26 px and label at 12 px/700;
 - active state highlighted inside its shared cell.
 
 Floating/pill navigation with side or bottom gaps is non-conforming.
@@ -240,16 +241,15 @@ No specialized panel may import this repository or another integration at runtim
 
 ## 14. Reference implementation
 
-The code template lives under:
+The canonical build-time source kit lives in `NikaSir/ha-contract-generated-ui` under:
 
 ```text
-templates/integration-panel-v1/
+templates/shell_v2/nikas-specialized-shell.js
 ```
 
 It provides:
 
-- `panel-shell-reference.js` — stable shell/reference component designed to be concatenated with the copied v1.9 zoom controller into one autonomous bundle;
-- `zoom-controller-reference.js` — the copy/adapt v1.9 gesture controller; concatenate it into the integration-owned production bundle;
+- `nikas-specialized-shell.js` — canonical host-bound Shell v2.2 source kit, vendored at build time into the integration-owned production bundle;
 - `panel-contract.example.json` — machine-readable metadata example;
 - `README.md` — adoption checklist.
 
