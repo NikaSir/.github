@@ -39,6 +39,7 @@ def main() -> None:
         knowledge_base = read_relative(knowledge_base_path)
         baseline = f"Normative baseline:** NikaS Specialized Panel UI Standard v{config['version']}"
         require(baseline in knowledge_base, "engineering knowledge base baseline does not match the canonical standard")
+        require("### 2.10 Peer status and selection are different facts" in knowledge_base, "knowledge base is missing the v2.2 peer-status lesson")
     digest = hashlib.sha256(standard.encode("utf-8")).hexdigest()
     require(digest == config.get("standard_sha256"), "local NikaS UI standard is not the canonical v2.2 copy")
     navigation_contract = read_relative(config["navigation_contract_path"])
@@ -67,16 +68,19 @@ def main() -> None:
         "capture-phase, non-passive `touchmove` boundary guard",
         "never displays the Home Assistant refresh spinner",
         "Five destinations, as used by Keenetic, conform to this limit.",
-        "icon no larger than `26px`",
-        "canonical glyph size is `26px`",
         "Build-time shell source",
         "/dashboard-house-v13/home",
         "/dashboard-rooms-v11/rooms",
+        "Peer-device status lamps — Stark SolarPower reference",
+        "red overrides orange, orange overrides green",
+        "Unchanged lamp state produces no DOM write.",
+        "icon no larger than `26px`",
+        "canonical glyph size is `26px`",
     ):
         require(clause in standard, f"canonical Header-return clause missing: {clause}")
 
     shell = config.get("shell_contract", {})
-    require(shell.get("version") == "2.2", "NikaS shell contract version must be 2.2")
+    require(shell.get("version") == "2.1", "NikaS shell contract version must be 2.1")
     require(shell.get("host_boundary") == "ha-panel", "shell must bind to the Home Assistant panel host")
     require(shell.get("header_body_px") == 60, "canonical Header body must be 60px")
     require(shell.get("peer_selector_px") == 52, "canonical peer selector must be 52px")
@@ -110,6 +114,27 @@ def main() -> None:
         "A missing, orphaned or mismatched public route is a blocking defect.",
     ):
         require(clause in navigation_contract, f"canonical navigation clause missing: {clause}")
+
+    lamp = config.get("peer_device_status_lamp_reference", {})
+    require(lamp.get("implementation") == "Stark SolarPower", "status-lamp reference must be Stark SolarPower")
+    require(lamp.get("diameter_px") == 9, "peer-device status lamp must be 9px")
+    require(lamp.get("halo_px") == 3, "peer-device status lamp halo must be 3px")
+    require(
+        lamp.get("states") == {
+            "good": "green",
+            "warning": "orange",
+            "fault": "red",
+            "unknown": "gray",
+        },
+        "peer-device status-lamp palette drift",
+    )
+    require(
+        lamp.get("state_priority") == ["fault", "warning", "good", "unknown"],
+        "peer-device status lamps must retain fail-closed priority",
+    )
+    require(lamp.get("selection_is_independent") is True, "selection and device health must remain independent")
+    require(lamp.get("update_mode") == "point-patch", "status lamps must use point-only DOM updates")
+    require(lamp.get("accessible_status_required") is True, "status lamps require accessible text")
 
     role = config.get("role")
     require(role in {"mirror", "registry", "base", "specialized", "readiness"}, f"unsupported NikaS UI role: {role}")
@@ -149,7 +174,7 @@ def main() -> None:
         source_kit_digest = hashlib.sha256(source_kit_text.encode("utf-8")).hexdigest()
         require(source_kit_digest == source_kit.get("sha256"), "canonical shell source-kit hash drift")
         for token in (
-            'const NIKAS_SHELL_V2_VERSION = "2.2"',
+            'const NIKAS_SHELL_V2_VERSION = "2.1"',
             "block-size:100%",
             "calc(60px + env(safe-area-inset-top,0px))",
             "calc(64px + env(safe-area-inset-bottom,0px))",
