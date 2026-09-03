@@ -3,12 +3,12 @@
   "navigation_contract_version": "1.2",
   "canonical_repository": "NikaSir/ha-contract-generated-ui",
   "standard_path": "NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md",
-  "standard_sha256": "5f01f0971526dc5536cc4cee123fe5a3edbab21b4c2c320937eca9455c71980e",
+  "standard_sha256": "3b6cc750b08aa0d2a375d1430ea04ac68c90525a527d197b014abd96728d23d1",
   "navigation_contract_path": "docs/NIKAS_PANEL_NAVIGATION_CONTRACT.md",
   "navigation_contract_sha256": "d495eca80345b96976c168029a96146803f3d8195b6f6fc723827b601ffb578e",
   "role": "mirror",
   "shell_contract": {
-    "version": "2.2",
+    "version": "2.1",
     "host_boundary": "ha-panel",
     "header_body_px": 60,
     "peer_selector_px": 52,
@@ -68,5 +68,26 @@
     "status_border_mix_percent": 30,
     "neutral_border_mix_percent": 28,
     "shadow": "0 4px 14px rgba(0,0,0,.055)"
+  },
+  "peer_device_status_lamp_reference": {
+    "implementation": "Stark SolarPower",
+    "visual_lineage": "StarLine",
+    "diameter_px": 9,
+    "halo_px": 3,
+    "states": {
+      "good": "green",
+      "warning": "orange",
+      "fault": "red",
+      "unknown": "gray"
+    },
+    "state_priority": [
+      "fault",
+      "warning",
+      "good",
+      "unknown"
+    ],
+    "selection_is_independent": true,
+    "update_mode": "point-patch",
+    "accessible_status_required": true
   }
 }
