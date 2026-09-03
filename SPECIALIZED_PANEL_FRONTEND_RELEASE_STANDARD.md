@@ -1,4 +1,4 @@
-# NikaS Specialized Panel Frontend Delivery Standard v2.2
+# NikaS Specialized Panel Frontend Delivery Standard v1.7
 
 **Status:** required for every integration-owned Home Assistant specialized panel
 **UI authority:** [`NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md`](NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md) v2.2
