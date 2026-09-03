@@ -1,23 +1,34 @@
 {
-  "version": "1.9",
-  "navigation_contract_version": "1.1",
+  "version": "2.2",
+  "navigation_contract_version": "1.2",
+  "canonical_repository": "NikaSir/ha-contract-generated-ui",
   "standard_path": "NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md",
-  "standard_sha256": "a31dc45499443f8fa43eaea1906fe3a793dffcb411b10cebcd3a3a205fbcef27",
+  "standard_sha256": "5f01f0971526dc5536cc4cee123fe5a3edbab21b4c2c320937eca9455c71980e",
   "navigation_contract_path": "docs/NIKAS_PANEL_NAVIGATION_CONTRACT.md",
-  "navigation_contract_sha256": "c87dc760c0900701f6a807a35aba40e790f68f52c39f4579583598f697997e52",
-  "role": "specialized",
-  "artifact_kind": "reference",
-  "runtime_files": ["reference/integration-panel-template/panel-shell.js"],
-  "header_return": {
-    "button_marker": "id=\"return-source\"",
-    "version_marker": "`UI v${normalized}`",
-    "focus_marker": ".header-title:focus-visible",
-    "pressed_marker": ".header-title:active",
-    "explicit_precedence_marker": "safeReturnRoute(current.searchParams.get(\"return_to\")) || safeReturnRoute(current.searchParams.get(\"from\"))",
-    "capture_once_marker": "this._returnRoute = resolveReturnRoute(this)",
-    "timestamp_required_marker": "handedOffRaw !== null && handedOffAtRaw !== null",
-    "future_timestamp_rejection_marker": "age >= 0"
+  "navigation_contract_sha256": "d495eca80345b96976c168029a96146803f3d8195b6f6fc723827b601ffb578e",
+  "role": "mirror",
+  "shell_contract": {
+    "version": "2.2",
+    "host_boundary": "ha-panel",
+    "header_body_px": 60,
+    "peer_selector_px": 52,
+    "bottom_nav_body_px": 64,
+    "content_max_width_px": 1280,
+    "coordinate_tolerance_px": 2,
+    "scroll_boundary_guard": "capture-non-passive-touchmove",
+    "specialized_tab_range": [
+      3,
+      5
+    ],
+    "viewport_matrix": {
+      "phone_portrait": "430x932",
+      "phone_landscape": "932x430",
+      "tablet_portrait": "768x1024",
+      "tablet_landscape": "1024x768",
+      "desktop": "1440x900"
+    }
   },
+  "runtime_files": [],
   "header_reference": {
     "implementation": "S8 OMNI",
     "implementation_source": "NikaSir/ha-s8-omni",
@@ -33,8 +44,8 @@
   "title_plaque_reference": {
     "implementation": "S8 OMNI",
     "implementation_source": "NikaSir/ha-s8-omni",
-    "min_width": "min(290px,100%)",
-    "min_height_px": 44,
+    "width": "min(360px,100%)",
+    "height_px": 52,
     "padding_px": "5 14",
     "radius_px": 16,
     "primary_background_mix_percent": 5,
