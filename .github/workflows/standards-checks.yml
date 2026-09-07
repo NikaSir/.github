@@ -18,3 +18,5 @@ jobs:
           python-version: "3.13"
       - name: Enforce synchronized NikaS UI v2.2 mirror
         run: python scripts/check_nikas_ui_standard.py
+      - name: Verify the revision-pinned repository contract mirror
+        run: python scripts/check_repository_contract_mirror.py

@@ -30,7 +30,24 @@ Apply a ruleset targeting `main` with the following baseline:
 6. Do not require signed commits until a signing workflow is deliberately adopted.
 7. Do not require a fixed approval count for a single-maintainer repository unless an additional reviewer is actually part of the project.
 
-When the bootstrap workflow is present, use its `validate` job as a required status check. When Hassfest/HACS/test jobs are added, promote them to required checks only after they have proved stable.
+Give every required job a unique name across workflows, such as
+`repository-checks`, `hacs`, `hassfest` and `nikas-strict-compliance`. Preserve
+existing required checks during migration. Rename jobs and update required
+contexts together so no old name is left waiting indefinitely.
+
+A result for one generic `validate` context must not stand for several
+independent workflows. If using an aggregate gate, run it after failed or
+skipped dependencies and explicitly require every mandatory result to be
+`success`. Cross-workflow jobs need separate required contexts or another
+verified aggregation mechanism. Check path filters before making a job required.
+
+The [NikaS Repository Contract](NIKAS_REPOSITORY_CONTRACT.md) distinguishes
+profile validity from strict product compliance. During adoption, strict
+inspection reports actual failures and unverified requirements. It becomes
+required for a consumer once those applicable gaps are closed and its trigger
+and job name have been verified. This does not waive a standard or remove an
+existing check. A document in this defaults repository does not automatically
+configure another repository's branch protection.
 
 ## Security
 
