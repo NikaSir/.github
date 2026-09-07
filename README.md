@@ -10,6 +10,10 @@ The goal is to keep contribution, support, security, issue, pull-request, reposi
 
 ## Defaults and shared standards provided
 
+- `NIKAS_REPOSITORY_CONTRACT.md` — mirror of the canonical repository contract
+  for factual delivery, data quality, commands, lifecycle and validation evidence.
+  Canonical schema, tooling and adoption registry are maintained in
+  `NikaSir/ha-contract-generated-ui`; see the contract's adoption sequence.
 - `CONTRIBUTING.md` — contribution and change-control rules.
 - `SECURITY.md` — responsible vulnerability reporting.
 - `SUPPORT.md` — support and diagnostic expectations.

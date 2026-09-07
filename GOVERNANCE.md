@@ -12,7 +12,10 @@ Projects under the `NikaSir` account use a maintainer-led governance model.
 
 ## Traceability
 
-Significant changes should be traceable through issues, pull requests, commits, changelog entries, and release tags as appropriate.
+Significant changes should be traceable through issues, pull requests, source
+commits, changelog entries and versioned validation evidence. NikaS publication
+uses reviewed `main` changes; GitHub Releases and automatic release tags are not
+created. Historical tags are not changed by tooling adoption.
 
 ## Repository autonomy
 
