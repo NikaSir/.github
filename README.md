@@ -2,7 +2,7 @@
 
 This repository contains the default community health and engineering-standard files used across public repositories owned by `NikaSir`.
 
-The current required specialized-panel contract is `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v2.2 together with `docs/NIKAS_PANEL_NAVIGATION_CONTRACT.md`. It includes the exact LIDER center return plaque, deterministic source-route hand-off, UPS-reference fixed Header actions, native scrolling at 100%, overflow-axis pan only above 100%, stable-DOM anti-flicker rules, the opt-in two-level connection/freshness indicator, the 12–25px typography range, the 26px Bottom Tab Bar icon rule and mandatory integration brand assets.
+The current required specialized-panel contract is `NIKAS_SPECIALIZED_PANEL_UI_STANDARD.md` v2.2 together with `docs/NIKAS_PANEL_NAVIGATION_CONTRACT.md` v1.2 and its declared companion contracts. `.nikas-ui-standard.json` pins the reviewed canonical revision in `NikaSir/ha-contract-generated-ui`; the local checker verifies the mirrored documents, hashes, lifecycle rules and locked connection geometry against that declaration.
 
 ## Purpose
 
@@ -23,6 +23,12 @@ The goal is to keep contribution, support, security, issue, pull-request, reposi
 - `.github/ISSUE_TEMPLATE/` — structured bug and feature request forms.
 - `REPOSITORY_STANDARD.md` — common repository structure and publication expectations.
 - `SPECIALIZED_PANEL_UI_STANDARD.md` — mandatory mobile-first navigation/application-shell contract for integration-owned Home Assistant panels.
+- `docs/NIKAS_PANEL_NAVIGATION_CONTRACT.md` — canonical route ownership and source-route hand-off rules.
+- `docs/NIKAS_PANEL_LIFECYCLE_CONTRACT.md` — registration, unavailable-state and recovery requirements.
+- `docs/NIKAS_CONNECTION_DECORATION_CONTRACT.md` — locked connection-plaque and blue-corner geometry.
+- `docs/NIKAS_REFRESH_ACTION_CONTRACT.md` — truthful refresh feedback and stable-render behavior.
+- `docs/NIKAS_HACS_PUBLICATION_CONTRACT.md` — HACS delivery and release identity requirements.
+- `docs/NIKAS_ENGINEERING_KNOWLEDGE_BASE.md` — reviewed implementation lessons bound to the normative baseline.
 - `NIKAS_INTEGRATION_PANEL_TEMPLATE.md` — mandatory common shell, visual primitives, geometry and information-presentation template for specialized panels.
 - `SPECIALIZED_PANEL_FRONTEND_RELEASE_STANDARD.md` — mandatory self-contained production-bundle and cold-load reliability contract for specialized Home Assistant panels.
 - `reference/integration-panel-template/` — development-time reference implementation of the shared panel shell and primitives; it is copied/vendored into integration source and must never be a cross-repository runtime dependency.
