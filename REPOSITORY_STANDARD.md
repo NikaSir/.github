@@ -13,7 +13,7 @@ Recommended repository settings:
 
 - Enable **Squash merging**.
 - Disable ordinary merge commits unless a project has a documented reason to keep them.
-- Rebase merging may remain disabled for a simpler, single-history policy.
+- Disable rebase merging for the common squash-only profile.
 - Automatically delete head branches after merge.
 
 The squash commit title should describe the delivered change, not the internal iteration history.
@@ -68,13 +68,19 @@ Every maintained project repository should have:
 - `.gitignore`
 - `docs/RELEASES.md`
 
+An existing workflow with an equivalent role may keep its filename (for example,
+`validate.yml` or `standards-checks.yml`). Preserve its required check names;
+do not create a duplicate workflow only to match the example path above.
+
 Home Assistant repositories add HACS, Hassfest and artifact validation only when the real `custom_components/<domain>/` implementation is present.
 
 ## Publication
 
-- Automatic release tags are neither created nor required. Any existing historical tag remains immutable and is not an update channel.
-- NikaS panel and integration changes are delivered through committed, reviewed branches and pull requests.
-- GitHub Releases are not created for this workflow.
+- Reviewed branches, pull requests and `main` remain the source of accepted code.
+- The default main-only workflow creates neither GitHub Releases nor automatic release tags. It applies only where the project's documented delivery channel supports that model.
+- **HACS exception:** repositories whose HACS delivery depends on release versions follow the [NikaS HACS Publication Contract](docs/NIKAS_HACS_PUBLICATION_CONTRACT.md). Matching Releases/tags are permitted and required for that channel. A merge alone does not prove that a version was delivered.
+- Each integration records its actual channel, release automation and any beta/stable acceptance process in `docs/RELEASES.md`. An approved transition is recorded separately from automation already implemented and delivery verified on the target installation.
+- Existing published Releases/tags and the previous stable version remain available for traceability and rollback.
 - Built/versioned artifacts remain traceable to their source commit and are validated before merge.
 - Existing project version lineage is preserved during GitHub migration.
 - A migration/bootstrap commit is not itself a functional product publication.
